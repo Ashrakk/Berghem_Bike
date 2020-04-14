@@ -94,8 +94,8 @@ export class ResponsiveManager {
   private mobileMode(
     status: boolean //toggle between mobile and desktop mode
   ) {
+    // MOBILE MODE
     if (status === true && status !== this.mobileStatus) {
-      // MOBILE MODE
       if (
         this.allColumnsElements != undefined &&
         this.allRowElements != undefined
@@ -150,7 +150,8 @@ export class ResponsiveManager {
     ) {
       this.mobileMode(true);
     } else if (
-      (width > 800 || this.mobileResponsive === false) &&
+      width > 800 &&
+      this.mobileResponsive === false &&
       this.mobileStatus === true
     ) {
       this.mobileMode(false);

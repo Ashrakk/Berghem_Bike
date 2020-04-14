@@ -52,8 +52,8 @@ export class ResponsiveManager {
     mobileMode(status //toggle between mobile and desktop mode
     ) {
         var _a, _b, _c, _d;
+        // MOBILE MODE
         if (status === true && status !== this.mobileStatus) {
-            // MOBILE MODE
             if (this.allColumnsElements != undefined &&
                 this.allRowElements != undefined) {
                 for (let index = 0; index < ((_a = this.allColumnsElements) === null || _a === void 0 ? void 0 : _a.length); index++) {
@@ -95,7 +95,8 @@ export class ResponsiveManager {
             this.mobileStatus === false) {
             this.mobileMode(true);
         }
-        else if ((width > 800 || this.mobileResponsive === false) &&
+        else if (width > 800 &&
+            this.mobileResponsive === false &&
             this.mobileStatus === true) {
             this.mobileMode(false);
         }
