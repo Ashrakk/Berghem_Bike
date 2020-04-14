@@ -1,0 +1,501 @@
+@font-face {
+	font-family: 'texgyreadventorregular';
+	src: url('fonts/texgyreadventor-regular-webfont.eot');
+	src: url('fonts/texgyreadventor-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('fonts/texgyreadventor-regular-webfont.woff2') format('woff2'),
+		 url('fonts/texgyreadventor-regular-webfont.woff') format('woff'),
+		 url('fonts/texgyreadventor-regular-webfont.ttf') format('truetype'),
+		 url('fonts/texgyreadventor-regular-webfont.svg#texgyreadventorregular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	@font-face {
+		font-family: 'texgyreadventorregular';
+		src: url('fonts/texgyreadventor-regular-webfont.svg#texgyreadventorregular') format('svg');
+	}
+}
+
+@font-face {
+	font-family: 'texgyreadventorbold';
+	src: url('fonts/texgyreadventor-bold-webfont.eot');
+	src: url('fonts/texgyreadventor-bold-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('fonts/texgyreadventor-bold-webfont.woff2') format('woff2'),
+		 url('fonts/texgyreadventor-bold-webfont.woff') format('woff'),
+		 url('fonts/texgyreadventor-bold-webfont.ttf') format('truetype'),
+		 url('fonts/texgyreadventor-bold-webfont.svg#texgyreadventorbold') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	@font-face {
+		font-family: 'texgyreadventorbold';
+		src: url('fonts/texgyreadventor-bold-webfont.svg#texgyreadventorbold') format('svg');
+	}
+}
+
+/*RESPONSIVENESS*/
+
+.div_navbar_menu_open
+{
+  width: 10em !important;
+  flex-direction: column !important;
+  min-height: 100%;
+  right: 0;
+}
+
+.logo_menu_open
+{
+  padding: 10px 0px !important;
+}
+
+.general_menu_open
+{
+  align-items: unset !important;
+  flex-direction: column !important;
+  padding: 10px 5px !important;
+}
+
+.menu_right_open
+{
+  justify-content: flex-start !important;
+  margin-right: 0 !important;
+}
+
+.div_center_menu_open
+{
+  padding-top: 0px !important;
+}
+
+/*STANDARDS*/
+
+body
+{
+  font-family: "texgyreadventorregular", sans-serif !important;
+  font-size: 1em;
+  text-align: center;
+  margin: 0px auto;
+  color: black;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+  padding: 0px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+p
+{
+  letter-spacing: 0.5px;
+}
+
+footer
+{
+  display: block;
+}
+
+/*UTILITIES*/
+
+.hidden
+{
+  display: none !important;
+}
+
+.flexColumn
+{
+  flex-direction: column !important;
+}
+
+.boldtext
+{
+  font-family: "texgyreadventorbold", sans-serif !important;
+}
+
+.column_width_1e6
+{
+  width: 15vw !important;
+}
+
+.column_width_1e5
+{
+  width: 20vw !important;
+}
+
+.column_width_1e4
+{
+  width: 25vw !important;
+}
+
+.column_width_1e3
+{
+  width: 33vw !important;
+}
+
+.text_left
+{
+  text-align: left !important;
+}
+
+.text_center
+{
+  text-align: center !important;
+}
+
+.spacer15
+{
+  height: 15px;
+  width:100%;
+}
+
+.spacer30
+{
+  height: 30px;
+  width:100%;
+}
+
+.margin0
+{
+  margin: 0px !important;
+}
+
+.paddingBottom20
+{
+  padding-bottom: 20px !important;
+}
+
+.fullheight
+{
+  height: 100%;
+}
+
+
+/*BACKGROUNDS*/
+
+.background
+{
+  background-image: url(images/common/background.png);
+  background-repeat: repeat;
+  background-size: auto;
+  z-index: -1;
+}
+
+.bikelogohomebig
+{
+  background-image: url(images/common/bikelogo.png);
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  position: relative;
+  height: 40vw;
+  z-index: 0;
+  align-self: normal;
+}
+
+/*SPECIFIC STUFF*/
+
+.div_page_footer
+{
+  width: 100%;
+  margin: 0px auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: rgb(80,80,80);
+  color: rgb(200,200,200);
+}
+
+/*CONTENITORE PRINCIPALE  */
+.div_center
+{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 30px;
+  padding-top: 50px;
+  transition: padding 0.3s ease-in-out;
+}
+
+.div_internal_row
+{
+  width: 95vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.div_internal_column
+{
+  width: 95vw;
+  display: flex;
+  flex-direction: column;
+  margin: 0px 2vw;
+  text-align: left;
+}
+
+/*BARRA NAVIGAZIONE FIXED TOP*/
+.div_navbar
+{
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  flex-direction: row;  
+  position: fixed;
+  background-color: #2f2f2f;
+  height: 60px;
+}
+
+/*CLASSE SECONDARIA MENU A DESTRA*/
+.menu_right
+{
+  flex: auto;
+  justify-content: flex-end;
+  margin-right: 5vw;
+}
+
+/*CLASSE BASE MENU*/
+.menu_left, .menu_right
+{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+/*EFFETTI ED ANIMAZIONI TASTI MENU*/
+.menu_left a, .menu_right a
+{
+  padding: 10px 15px;
+  margin: 5px 5px;
+  background-color: #000000a8;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 2px;
+  overflow: hidden;
+  -webkit-transform: perspective(0px) translateZ(0);
+  transform: perspective(0px) translateZ(0);
+}
+
+.menu_left a:after, .menu_right a:after
+{
+  content: '';
+  height: 1px;
+  position: absolute;
+  bottom: 0%;
+  left: 0;
+  width: 0%;
+  background: white;
+  transition: 0.4s;
+}
+
+.menu_left a:hover:after, .menu_right a:hover:after
+{
+  width: 100%;
+}
+
+/*MODALS, LIGHTBOX*/
+.modal_overlay
+{
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal_container
+{
+  position: relative;
+  padding: 1px 10px;
+}
+
+.modal_content
+{
+  position: relative;
+  top: 25%;
+  margin: auto;
+  background-color: rgba(202, 191, 92, 0.84);
+  padding: 0;
+  outline: 0;
+  width: 500px;
+}
+
+.modal_button
+{
+  font-size: 32px;
+  padding: 0px 5px;
+  cursor: pointer;
+  margin: -15px 0px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.modal_button:hover, .modal_button:active
+{
+  transform: scale(1.3);
+}
+
+/*FORMS*/
+
+.form_style
+{
+  background-color: #ffffff;
+  color: #222222;
+  padding: 10px 20px;
+  text-align: left;
+  font-size: 16px;
+}
+
+/*FORM LABELS*/
+.form_style div
+{
+  padding-bottom: 5px;
+}
+
+/*FORM TASTI*/
+.form_style input, textarea, select
+{
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 16px;
+  resize: none;
+}
+
+/*FORM SUBMIT*/
+.submit_button
+{
+  font-size: 16px !important;
+  padding: 3px;
+  width: 25%;
+  background-color: #00000059 !important;
+  color: white;
+  margin: 5px;
+  padding: 5px;
+  border: 0px;
+  transition: background 0.3s ease-in-out !important;
+  -moz-transition: background 0.3s ease-in-out !important;
+  -webkit-transition: background 0.3s ease-in-out !important;
+  -o-transition: background 0.3s ease-in-out !important;
+  -ms-transition: background 0.3s ease-in-out !important;
+}
+
+/*FORM EFFETTO SUBMIT */
+.submit_button:hover, .submit_button:active
+{
+  background-color: #191919bd !important;
+}
+
+/*IMAGES*/
+
+#id-menu-right-dropdown
+{
+  align-self: center;
+  background-color: Transparent;
+  object-fit: scale-down;
+  cursor: pointer;
+  max-width: 45px;
+  max-height: 100%;
+  transition: transform 0.3s ease-in-out;
+}
+
+#drop_down_menu_button:hover
+{
+  transform: scale(1.1);
+}
+
+.loader
+{
+  padding: 50% 0px;
+  transform: scale(1.5);
+}
+
+.icon
+{
+  background-color: Transparent;
+  object-fit: scale-down;
+  max-height: 50px;
+}
+
+.logo
+{
+    background-color: Transparent;
+    object-fit: scale-down;
+    max-width:100%;
+    max-height:100%;
+    padding: 5px 10px;
+    padding-right: 15px;
+}
+
+.full_image
+{
+  width: 70%;
+  height: 100%;
+  background-color: Transparent;
+}
+
+.big_image
+{
+  object-fit: scale-down;
+  width: 800px;
+  height: 460px;
+  background-color: Transparent;
+  cursor:zoom-in;
+}
+
+.small_image
+{
+  object-fit: scale-down;
+  width: 300px;
+  height: 170px;
+  cursor:zoom-in;
+}
+
+/*ANIMAZIONI*/
+@keyframes menuFadeIn {
+  from
+  {
+    opacity: 0.0;
+    transform: translateX(35%);
+  }
+  to
+  {
+    opacity: 1.0;
+    transform: translateX(0%);
+  }
+}
+
+@keyframes menuFadeOut {
+  from
+  {
+    opacity: 0.0;
+    transform: translateY(-35%);
+  }
+  to
+  {
+    opacity: 1.0;
+    transform: translateY(0%);
+  }
+}
+
+.anim_menuFadeIn
+{
+  animation: menuFadeIn ease-in-out 0.3s;
+  animation-play-state: running;
+}
+
+.anim_menuFadeOut
+{
+  animation: menuFadeOut ease-in-out 0.3s;
+  animation-play-state: running;
+}
