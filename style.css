@@ -7,14 +7,16 @@
 		 url('fonts/texgyreadventor-regular-webfont.ttf') format('truetype'),
 		 url('fonts/texgyreadventor-regular-webfont.svg#texgyreadventorregular') format('svg');
 	font-weight: normal;
-	font-style: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	@font-face {
 		font-family: 'texgyreadventorregular';
 		src: url('fonts/texgyreadventor-regular-webfont.svg#texgyreadventorregular') format('svg');
-	}
+    font-display: swap;
+  }
 }
 
 @font-face {
@@ -26,14 +28,16 @@
 		 url('fonts/texgyreadventor-bold-webfont.ttf') format('truetype'),
 		 url('fonts/texgyreadventor-bold-webfont.svg#texgyreadventorbold') format('svg');
 	font-weight: normal;
-	font-style: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	@font-face {
 		font-family: 'texgyreadventorbold';
 		src: url('fonts/texgyreadventor-bold-webfont.svg#texgyreadventorbold') format('svg');
-	}
+    font-display: swap;
+  }
 }
 
 /*RESPONSIVENESS*/
@@ -67,6 +71,11 @@
 .div_center_menu_open
 {
   padding-top: 0px !important;
+}
+
+.modal_content_mobile
+{
+  width: 95vw !important;
 }
 
 /*STANDARDS*/
@@ -115,6 +124,11 @@ footer
   font-family: "texgyreadventorbold", sans-serif !important;
 }
 
+.width50
+{
+  width: 50vw;
+}
+
 .column_width_1e6
 {
   width: 15vw !important;
@@ -159,7 +173,13 @@ footer
 
 .margin0
 {
-  margin: 0px !important;
+  margin: 0px auto !important;
+}
+
+.padding30
+{
+  padding-top: 30px !important;  
+  padding-Bottom: 30px !important;
 }
 
 .paddingBottom20
@@ -226,7 +246,7 @@ footer
   flex-direction: row;
   justify-content: center;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .div_internal_column
@@ -241,7 +261,7 @@ footer
 /*BARRA NAVIGAZIONE FIXED TOP*/
 .div_navbar
 {
-  z-index: 10;
+  z-index: 5;
   width: 100%;
   display: flex;
   flex-direction: row;  
@@ -267,13 +287,16 @@ footer
 }
 
 /*EFFETTI ED ANIMAZIONI TASTI MENU*/
-.menu_left a, .menu_right a
+.menu_left a,
+.menu_right a,
+.menu_left butt,
+.menu_right butt
 {
   padding: 10px 15px;
   margin: 5px 5px;
   background-color: #000000a8;
   color: #fff;
-  font-size: 16px;
+  cursor: pointer;
   font-weight: 600;
   text-decoration: none;
   letter-spacing: 2px;
@@ -282,7 +305,10 @@ footer
   transform: perspective(0px) translateZ(0);
 }
 
-.menu_left a:after, .menu_right a:after
+.menu_left a:after,
+.menu_right a:after,
+.menu_left butt:after,
+.menu_right butt:after
 {
   content: '';
   height: 1px;
@@ -294,19 +320,41 @@ footer
   transition: 0.4s;
 }
 
-.menu_left a:hover:after, .menu_right a:hover:after
+.menu_left a:hover:after,
+.menu_right a:hover:after,
+.menu_left butt:hover:after,
+.menu_right butt:hover:after
 {
   width: 100%;
+}
+
+.specialButton
+{
+  padding: 10px 15px;
+  background-color: #00a2ffd3;
+  color: rgb(0, 0, 0);
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 1px;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  transition-property: background, box-shadow;
+}
+
+.specialButton:hover, .specialButton:active
+{
+  background-color: #00a2ff;
+  box-shadow: rgba(0, 0, 0, 0.60) 0px 0px 15px 5px;
 }
 
 /*MODALS, LIGHTBOX*/
 .modal_overlay
 {
-  display: none;
+  display: block;
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 1;
+  z-index: 10;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -324,13 +372,13 @@ footer
   position: relative;
   top: 25%;
   margin: auto;
-  background-color: rgba(202, 191, 92, 0.84);
+  background-color: rgba(226, 175, 29, 0.9);
   padding: 0;
   outline: 0;
-  width: 500px;
+  width: 400px;
 }
 
-.modal_button
+.modal_button_close
 {
   font-size: 32px;
   padding: 0px 5px;
@@ -378,7 +426,7 @@ footer
   font-size: 16px !important;
   padding: 3px;
   width: 25%;
-  background-color: #00000059 !important;
+  background-color: #0000009a !important;
   color: white;
   margin: 5px;
   padding: 5px;
@@ -393,7 +441,7 @@ footer
 /*FORM EFFETTO SUBMIT */
 .submit_button:hover, .submit_button:active
 {
-  background-color: #191919bd !important;
+  background-color: #191919d3 !important;
 }
 
 /*IMAGES*/

@@ -15,6 +15,7 @@ export class ResponsiveManager {
         this.allColumnsElements = document.querySelectorAll('.div_internal_column, .column_width_1e6, .column_width_1e5, .column_width_1e4, .column_width_1e3');
         this.allRowElements = document.querySelectorAll('.div_internal_row');
         this.mainContentContainer = document.getElementById('id-main-content-container');
+        this.modals = document.querySelectorAll('.modal_content');
         this.mobileResponsive = false;
         this.mobileStatus = false;
         this.init();
@@ -36,7 +37,7 @@ export class ResponsiveManager {
             this.handleResponsiveness();
         });
         (_b = this.menuOpener) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
-            this.handleMenuButton();
+            this.toggleMenu();
         });
         (_c = this.pageLoader) === null || _c === void 0 ? void 0 : _c.classList.add('hidden');
         (_d = this.pageContainer) === null || _d === void 0 ? void 0 : _d.classList.remove('hidden');
@@ -51,11 +52,12 @@ export class ResponsiveManager {
     }
     mobileMode(status //toggle between mobile and desktop mode
     ) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e, _f;
         // MOBILE MODE
         if (status === true && status !== this.mobileStatus) {
             if (this.allColumnsElements != undefined &&
-                this.allRowElements != undefined) {
+                this.allRowElements != undefined &&
+                this.modals != undefined) {
                 for (let index = 0; index < ((_a = this.allColumnsElements) === null || _a === void 0 ? void 0 : _a.length); index++) {
                     this.allColumnsElements
                         .item(index)
@@ -65,6 +67,9 @@ export class ResponsiveManager {
                 for (let index = 0; index < ((_b = this.allRowElements) === null || _b === void 0 ? void 0 : _b.length); index++) {
                     this.allRowElements.item(index).classList.add('flexColumn');
                 }
+                for (let index = 0; index < ((_c = this.modals) === null || _c === void 0 ? void 0 : _c.length); index++) {
+                    this.modals.item(index).classList.add('modal_content_mobile');
+                }
             }
             this.mobileStatus = status;
             return;
@@ -72,15 +77,19 @@ export class ResponsiveManager {
         else if (status === false && status !== this.mobileStatus) {
             // DESKTOP MODE
             if (this.allColumnsElements != undefined &&
-                this.allRowElements != undefined) {
-                for (let index = 0; index < ((_c = this.allColumnsElements) === null || _c === void 0 ? void 0 : _c.length); index++) {
+                this.allRowElements != undefined &&
+                this.modals != undefined) {
+                for (let index = 0; index < ((_d = this.allColumnsElements) === null || _d === void 0 ? void 0 : _d.length); index++) {
                     this.allColumnsElements
                         .item(index)
                         .classList.remove('paddingBottom20');
                     this.allColumnsElements.item(index).classList.value = this.allColumnsOriginalClasses[index];
                 }
-                for (let index = 0; index < ((_d = this.allRowElements) === null || _d === void 0 ? void 0 : _d.length); index++) {
+                for (let index = 0; index < ((_e = this.allRowElements) === null || _e === void 0 ? void 0 : _e.length); index++) {
                     this.allRowElements.item(index).classList.remove('flexColumn');
+                }
+                for (let index = 0; index < ((_f = this.modals) === null || _f === void 0 ? void 0 : _f.length); index++) {
+                    this.modals.item(index).classList.remove('modal_content_mobile');
                 }
             }
             this.mobileStatus = status;
@@ -130,10 +139,10 @@ export class ResponsiveManager {
             (_m = this.menuLeft) === null || _m === void 0 ? void 0 : _m.classList.remove('hidden');
             (_o = this.menuRight) === null || _o === void 0 ? void 0 : _o.classList.remove('hidden');
             (_p = this.menuOpenerContainer) === null || _p === void 0 ? void 0 : _p.classList.add('hidden');
-            this.handleMenuButton();
+            this.toggleMenu();
         }
     }
-    handleMenuButton() {
+    toggleMenu() {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
         if (this.menuStatus === true) {
             //if OPEN, then CLOSE

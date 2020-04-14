@@ -17,6 +17,10 @@ export class ResponsiveManager {
   private allRowElements: NodeListOf<Element> | undefined | null;
   private allColumnsOriginalClasses: string[] = [];
 
+  /*MODAL (Resizing for responsiveness) */
+  private modals:  NodeListOf<Element> | undefined | null;
+
+  /*VARIABLES*/
   private mobileResponsive: boolean; // TRUE = MOBILE
   private mobileStatus: boolean;
 
@@ -41,6 +45,7 @@ export class ResponsiveManager {
     this.mainContentContainer = document.getElementById(
       'id-main-content-container'
     );
+    this.modals = document.querySelectorAll('.modal_content');
     this.mobileResponsive = false;
     this.mobileStatus = false;
 
@@ -69,7 +74,7 @@ export class ResponsiveManager {
       this.handleResponsiveness();
     });
     this.menuOpener?.addEventListener('click', () => {
-      this.handleMenuButton();
+      this.toggleMenu();
     });
 
     this.pageLoader?.classList.add('hidden');
@@ -98,7 +103,8 @@ export class ResponsiveManager {
     if (status === true && status !== this.mobileStatus) {
       if (
         this.allColumnsElements != undefined &&
-        this.allRowElements != undefined
+        this.allRowElements != undefined &&
+        this.modals != undefined
       ) {
         for (let index = 0; index < this.allColumnsElements?.length; index++) {
           this.allColumnsElements
@@ -115,6 +121,9 @@ export class ResponsiveManager {
         for (let index = 0; index < this.allRowElements?.length; index++) {
           this.allRowElements.item(index).classList.add('flexColumn');
         }
+        for (let index = 0; index < this.modals?.length; index++) {
+          this.modals.item(index).classList.add('modal_content_mobile');
+        }
       }
       this.mobileStatus = status;
       return;
@@ -122,7 +131,8 @@ export class ResponsiveManager {
       // DESKTOP MODE
       if (
         this.allColumnsElements != undefined &&
-        this.allRowElements != undefined
+        this.allRowElements != undefined &&
+        this.modals != undefined
       ) {
         for (let index = 0; index < this.allColumnsElements?.length; index++) {
           this.allColumnsElements
@@ -134,6 +144,9 @@ export class ResponsiveManager {
         }
         for (let index = 0; index < this.allRowElements?.length; index++) {
           this.allRowElements.item(index).classList.remove('flexColumn');
+        }
+        for (let index = 0; index < this.modals?.length; index++) {
+          this.modals.item(index).classList.remove('modal_content_mobile');
         }
       }
       this.mobileStatus = status;
@@ -192,11 +205,11 @@ export class ResponsiveManager {
       this.menuLeft?.classList.remove('hidden');
       this.menuRight?.classList.remove('hidden');
       this.menuOpenerContainer?.classList.add('hidden');
-      this.handleMenuButton();
+      this.toggleMenu();
     }
   }
 
-  private handleMenuButton() {
+  public toggleMenu() {
     if (this.menuStatus === true) {
       //if OPEN, then CLOSE
       this.mainContentContainer?.classList.remove('div_center_menu_open');

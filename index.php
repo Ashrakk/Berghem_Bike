@@ -12,37 +12,42 @@
     <meta name="viewport"
       content="
           width = 'device-width',
-          initial-scale = 1.0 ,
-          minimum-scale = 0.75 ,
-          maximum-scale = 10.0, ">
+          initial-scale = 1.0,
+          minimum-scale = 0.75,
+          maximum-scale = 10.0 ">
 
-    <script src="./ts/build/src/responsive.js" type="module"></script>
+    <script src="./ts/build/src/uimanager.js" type="module"></script>
+    <script src="./ts/build/src/modal.js" type="module"></script>
 
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <script type="module">
 
       // IMPORTO LE CLASSI NECESSARIE
-      import { ResponsiveManager } from './ts/build/src/responsive.js';
+      import { UIManager } from './ts/build/src/uimanager.js';
+      import { Modal } from './ts/build/src/modal.js';
 
       initialize();
 
       function initialize()
       {
-        let resp = new ResponsiveManager();
+        let modal_login = new Modal('modal_container_login', 'id-butt-login');
+        let modal_register = new Modal('modal_container_register', 'id-butt-register');
+
+        let uimanager = new UIManager(modal_login, modal_register);
       }
 
     </script>
 
   </head>
   <body>
-    <!-- MODALE/LIGHTBOX, NASCOSTO DEFAULT -->
-    <div class="modal_overlay" id="modal_container">
+    <!-- MODALE LOGIN, NASCOSTO DEFAULT -->
+    <div class="modal_overlay hidden" id="modal_container_login">
       <div class="modal_content">
         <header class="modal_container">
           <span onclick=""
-           class="modal_button">×</span>
-          <h2>Login</h2>
+           class="modal_button_close">×</span>
+          <h2>Accedi</h2>
         </header>
           <form class= "form_style" action="user_managment/login.php" method="POST" id="login_form">
             <div>
@@ -60,11 +65,49 @@
       </div>
     </div>
 
-    <!-- CONTENITORE PRINCIPALE FLEX ROW | | | -->
+    <!-- MODALE REGISTER, NASCOSTO DEFAULT -->
+    <div class="modal_overlay hidden" id="modal_container_register">
+      <div class="modal_content">
+        <header class="modal_container">
+          <span onclick=""
+           class="modal_button_close">×</span>
+          <h2>Nuovo Account</h2>
+        </header>
+          <form class= "form_style" action="user_managment/login.php" method="POST" id="login_form">
+            <div>
+              Nome utente
+            </div>
+            <input type="text" name="username">
+            <div>
+              Email
+            </div>
+            <input type="email" name="email">
+            <div>
+              Data di nascita
+            </div>
+            <input type="date" name="birthdate"
+              min="1920-01-01" max="2020-01-01">
+            <div>
+              Password
+            </div>
+            <input type="password" name="password">
+            <div>
+              Conferma password
+            </div>
+            <input type="password" name="password">
+          </form>
+          <footer class="modal_container">
+            <button type="submit" form="login_form" class = "submit_button">Login</button>
+          </footer>
+      </div>
+    </div>
+
+    <!-- CARICAMENTO -->
     <div class="background fullheight" id ="id-page-loader">
       <img class="loader" src="images/common/loading-1-dark.gif" >
     </div>
     
+    <!-- CONTENITORE PRINCIPALE FLEX ROW | | | -->
     <div class="div_row background hidden" id="id-page-container">
       <!-- CONTENITORE MENU INLINE FLEX -->
       <div class="div_navbar" id="id-navbar">
@@ -77,18 +120,18 @@
         </div>
 
         <div class="menu_right" id='id-menu-right-1'>
-        <a href="user_managment/login.php"  type="button">Accedi</a>
-        <a href="user_managment/register.php"  type="button">Registrati</a>
+          <butt id='id-butt-login'>Accedi</butt>
+          <butt id='id-butt-register'>Registrati</butt>
         </div>
 
         <div class="menu_right hidden" id='id-menu-right-2'>
-            <a href="user_managment/user/dashboard.php"  type="button">Dashboard</a>
-            <a href="user_managment/account.php"  type="button">Account</a>
-            <a href="user_managment/logout.php"  type="button">Logout</a>
+          <a href="user_managment/user/dashboard.php"  type="button">Dashboard</a>
+          <a href="user_managment/account.php"  type="button">Account</a>
+          <a href="user_managment/logout.php"  type="button">Logout</a>
         </div>
 
         <div class="menu_right hidden" id='id-menu-right-dropdown-container'>
-            <img id="id-menu-right-dropdown" src = "images/common/dropdown-menu-icon-16.png">
+          <img id="id-menu-right-dropdown" src = "images/common/dropdown-menu-icon-16.png">
         </div>
 
 

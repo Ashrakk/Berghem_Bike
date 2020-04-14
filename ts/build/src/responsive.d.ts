@@ -12,6 +12,7 @@ export declare class ResponsiveManager {
     private allColumnsElements;
     private allRowElements;
     private allColumnsOriginalClasses;
+    private modals;
     private mobileResponsive;
     private mobileStatus;
     constructor();
@@ -19,5 +20,5 @@ export declare class ResponsiveManager {
     private mobileCheck;
     private mobileMode;
     private handleResponsiveness;
-    private handleMenuButton;
+    toggleMenu(): void;
 }
