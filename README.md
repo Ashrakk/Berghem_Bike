@@ -20,7 +20,3 @@ Also, i might bring this project as thesis for my Diploma.
 
 - TSLint
 - gts (Google TypeScript Style) (includes ESLint)
-
-
-
-
