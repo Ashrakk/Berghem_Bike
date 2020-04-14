@@ -14,8 +14,7 @@
           width = 'device-width',
           initial-scale = 1.0 ,
           minimum-scale = 0.75 ,
-          maximum-scale = 1.5 ,
-          user-scalable = no ">
+          maximum-scale = 10.0, ">
 
     <script src="./ts/build/src/responsive.js" type="module"></script>
 
@@ -121,7 +120,7 @@
           <div class="div_internal_row">
             <div class="div_internal_column column_width_1e5">
               <img src = "images/common/health.png" class = "icon">
-              <h3>
+              <h3 class="text_center">
               Sostenibile e salutare
               </h3>
               <p class="text_left margin0">
@@ -130,7 +129,7 @@
             </div>
             <div class="div_internal_column  column_width_1e5">
               <img src = "images/common/bicycle.png" class = "icon">
-              <h3>
+              <h3 class="text_center">
               Una soluzione efficente
               </h3>
               <p class="text_left margin0">
@@ -139,12 +138,35 @@
             </div>
             <div class="div_internal_column column_width_1e5">
             <img src = "images/common/helmet.svg" class = "icon">
-              <h3>
-              Maggiore sicurezza stradale
+              <h3 class="text_center">
+              Meno incidenti
               </h3>
               <p class="text_left margin0">
-              Se ci fossero più biciclette in circolazione i guidatori sarebbero più consapevoli dei ciclisti, abbassando la probabilità di incidenti! 
+              La statistica afferma che con un maggiore traffico di biciclette si riduce la probabilità di incidenti!
               </p>
+            </div>
+          </div>
+          <div class="div_internal_row">
+            <div class="div_internal_column text_center"> 
+              <h2>
+                Come funziona?
+              </h2>
+              <p class="boldtext width50 margin0">
+                Semplice, ritira una bici da una nostra stazione <br>
+                riconsegnala entro 2 ore in qualsiasi altra stazione.
+              </p>
+              <div class="padding30">
+                <a class="specialButton" href="user_managment/register.php" type="button" >
+                  Registrati ora!
+                </a>       
+              </div>
+            </div>
+          </div>
+          <div class="div_internal_row">
+            <div class="div_internal_column text_center"> 
+              <h2>
+                Scopri le nostre stazioni
+              </h2>
             </div>
           </div>
       </div>

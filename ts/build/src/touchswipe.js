@@ -14,7 +14,7 @@ export class TouchSwipe {
             });
         }
         else {
-            alert("Error: element is undefined!");
+            alert('Error: element is undefined!');
         }
     }
     onLeft(callback) {
@@ -37,23 +37,23 @@ export class TouchSwipe {
         if (!this.xDown || !this.yDown) {
             return;
         }
-        var xUp = evt.touches[0].clientX;
-        var yUp = evt.touches[0].clientY;
-        let xDiff = this.xDown - xUp;
-        let yDiff = this.yDown - yUp;
+        const xUp = evt.touches[0].clientX;
+        const yUp = evt.touches[0].clientY;
+        const xDiff = this.xDown - xUp;
+        const yDiff = this.yDown - yUp;
         if (Math.abs(xDiff) > Math.abs(yDiff)) {
-            if (xDiff > (0 + this.swipeLenght)) {
+            if (xDiff > 0 + this.swipeLenght) {
                 this.onLeft();
             }
-            else if (xDiff < (0 - this.swipeLenght)) {
+            else if (xDiff < 0 - this.swipeLenght) {
                 this.onRight();
             }
         }
         else {
-            if (yDiff > (0 + this.swipeLenght)) {
+            if (yDiff > 0 + this.swipeLenght) {
                 this.onUp();
             }
-            else if (yDiff < (0 - this.swipeLenght)) {
+            else if (yDiff < 0 - this.swipeLenght) {
                 this.onDown();
             }
         }

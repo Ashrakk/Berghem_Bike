@@ -11,10 +11,11 @@ export declare class ResponsiveManager {
     private mainContentContainer;
     private allColumnsElements;
     private allRowElements;
-    private allColumnsElementsOriginalClasses;
+    private allColumnsOriginalClasses;
     private mobileResponsive;
     private mobileStatus;
     constructor();
+    private init;
     private mobileCheck;
     private mobileMode;
     private handleResponsiveness;
