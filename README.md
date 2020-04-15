@@ -20,3 +20,57 @@ Also, i might bring this project as thesis for my Diploma.
 
 - TSLint
 - gts (Google TypeScript Style) (includes ESLint)
+
+### Install Typescript:
+
+```shell
+$ npm i typescript -g
+```
+
+Go to ```ts/``` directory
+```shell
+$ cd ts
+```
+
+Initiliaze Typescript
+but do **NOT** overwrite
+*tsconfig.json*
+```shell
+$ tsc --init
+```
+
+### Install TSLint 
+#### (optional but recommended)
+
+```shell
+$ npm i tslint --g
+```
+
+Initialize TSLint
+```shell
+$ tslint --init
+```
+
+### Install gts:
+#### (optional but recommended)
+
+```shell
+$ npx gts init
+```
+
+Install dependencies
+```shell
+$ npm install
+```
+
+### Compile
+
+```shell
+$ tsc
+```
+
+or enter watch mode so it automatically compiles on every change
+
+```shell
+$ tsc -w
+```
