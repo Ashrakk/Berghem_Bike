@@ -9,9 +9,10 @@ export class TouchSwipe {
   constructor(element: any, swipeLenght?: number) {
     this.xDown = 0;
     this.yDown = 0;
+    this.element = element;
     if (swipeLenght != undefined) this.swipeLenght = swipeLenght;
     else this.swipeLenght = 10;
-    if (element != undefined) {
+    if (this.element != undefined) {
       this.element.addEventListener('touchstart', (evt: TouchEvent) => {
         this.xDown = evt.touches[0].clientX;
         this.yDown = evt.touches[0].clientY;
@@ -22,7 +23,8 @@ export class TouchSwipe {
   }
 
   onLeft(callback?: () => void): void {
-    if (callback != undefined) this.onLeft = callback;
+    if (callback != undefined)
+      this.onLeft = callback;
   }
 
   onRight(callback?: () => void): void {
@@ -49,15 +51,15 @@ export class TouchSwipe {
     const yDiff = this.yDown - yUp;
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) {
-      if (xDiff > 0 + this.swipeLenght) {
+      if (xDiff > (0 + this.swipeLenght)) {
         this.onLeft();
-      } else if (xDiff < 0 - this.swipeLenght) {
+      } else if (xDiff < (0 - this.swipeLenght)) {
         this.onRight();
       }
     } else {
-      if (yDiff > 0 + this.swipeLenght) {
+      if (yDiff > (0 + this.swipeLenght)) {
         this.onUp();
-      } else if (yDiff < 0 - this.swipeLenght) {
+      } else if (yDiff < (0 - this.swipeLenght)) {
         this.onDown();
       }
     }

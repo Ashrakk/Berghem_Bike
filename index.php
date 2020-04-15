@@ -11,10 +11,9 @@
 
     <meta name="viewport"
       content="
-          width = 'device-width',
           initial-scale = 1.0,
           minimum-scale = 0.75,
-          maximum-scale = 10.0 ">
+          maximum-scale = 10.0">
 
     <script src="./ts/build/src/uimanager.js" type="module"></script>
     <script src="./ts/build/src/modal.js" type="module"></script>
@@ -33,8 +32,9 @@
       {
         let modal_login = new Modal('modal_container_login', 'id-butt-login');
         let modal_register = new Modal('modal_container_register', 'id-butt-register');
+        let modal_register_now = new Modal('modal_container_register', 'id-specialbutton');
 
-        let uimanager = new UIManager(modal_login, modal_register);
+        let uimanager = new UIManager(modal_login, modal_register, modal_register_now);
       }
 
     </script>
@@ -199,9 +199,9 @@
                 riconsegnala entro 2 ore in qualsiasi altra stazione.
               </p>
               <div class="padding30">
-                <a class="specialButton" href="user_managment/register.php" type="button" >
+                <butt id="id-specialbutton" class="specialButton">
                   Registrati ora!
-                </a>       
+                </butt>       
               </div>
             </div>
           </div>

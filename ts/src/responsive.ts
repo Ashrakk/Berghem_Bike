@@ -9,6 +9,9 @@ export class ResponsiveManager {
   private menuRight: HTMLElement | undefined | null;
   private menuStatus: boolean; // TRUE = OPEN
 
+  public isMenuOpen(): boolean { return this.menuStatus;}
+  public getMenuNavbar(): HTMLElement | undefined | null {return this.menuNavbar;}
+
   /*PAGE STUFF*/
   private pageContainer: HTMLElement | undefined | null;
   private pageLoader: HTMLElement | undefined | null;
@@ -17,12 +20,18 @@ export class ResponsiveManager {
   private allRowElements: NodeListOf<Element> | undefined | null;
   private allColumnsOriginalClasses: string[] = [];
 
+  public getPageContainer(): HTMLElement | undefined | null {return this.pageContainer;}
+
+
   /*MODAL (Resizing for responsiveness) */
   private modals:  NodeListOf<Element> | undefined | null;
 
   /*VARIABLES*/
   private mobileResponsive: boolean; // TRUE = MOBILE
   private mobileStatus: boolean;
+
+  public isMobileResponsive(): boolean { return this.mobileResponsive;}
+  public isMobileModeActive(): boolean { return this.mobileStatus;}
 
   constructor() {
     /*MENU STUFF*/
