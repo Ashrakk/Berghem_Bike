@@ -331,19 +331,20 @@ footer
 .specialButton
 {
   padding: 10px 15px;
-  background-color: #00a2ffd3;
+  background-color: rgba(255, 141, 0, 0.9);
   color: rgb(0, 0, 0);
   font-weight: 600;
+  cursor: pointer;
   text-decoration: none;
   letter-spacing: 1px;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
-  transition-property: background, box-shadow;
+  transition-property: box-shadow;
 }
 
 .specialButton:hover, .specialButton:active
 {
-  background-color: #00a2ff;
+  /*background-color: rgba(189, 104, 0, 0.9);*/
   box-shadow: rgba(0, 0, 0, 0.60) 0px 0px 15px 5px;
 }
 
@@ -369,10 +370,11 @@ footer
 
 .modal_content
 {
+  z-index: 15;
   position: relative;
   top: 25%;
   margin: auto;
-  background-color: rgba(226, 175, 29, 0.9);
+  background-color: rgba(255, 141, 0, 0.9);
   padding: 0;
   outline: 0;
   width: 400px;
