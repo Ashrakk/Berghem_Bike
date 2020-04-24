@@ -6,7 +6,7 @@
 
 - Working with multiple cooperating languages 
 - Learning TypeScript 
-- Learning Google Maps API
+- Learning ~~Google Maps API~~ Leaflet 
 - Learning Ajax (XMLHttpRequests) and long-pooling method
 - Learning fundamental PHP by making a user managment system and a simple user/admin dashboard
 - Practicing embedded SQL with PHP
