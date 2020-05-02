@@ -86,9 +86,9 @@ Go to
 ```shell
 node_modules/leaflet/package.json
 ```
-then change main into 
+then change main (at line 108) into 
 ```shell
-"src/Leaflet.js"
+"main": "src/Leaflet.js",
 ```
 
 This is needed because otherwise the bundler won't be able to find the exports of leaflet 
