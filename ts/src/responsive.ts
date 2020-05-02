@@ -9,8 +9,12 @@ export class ResponsiveManager {
   private menuRight: HTMLElement | undefined | null;
   private menuStatus: boolean; // TRUE = OPEN
 
-  public isMenuOpen(): boolean { return this.menuStatus;}
-  public getMenuNavbar(): HTMLElement | undefined | null {return this.menuNavbar;}
+  public isMenuOpen(): boolean {
+    return this.menuStatus;
+  }
+  public getMenuNavbar(): HTMLElement | undefined | null {
+    return this.menuNavbar;
+  }
 
   /*PAGE STUFF*/
   private pageContainer: HTMLElement | undefined | null;
@@ -20,20 +24,27 @@ export class ResponsiveManager {
   private allRowElements: NodeListOf<Element> | undefined | null;
   private allColumnsOriginalClasses: string[] = [];
 
-  public getPageContainer(): HTMLElement | undefined | null {return this.pageContainer;}
-
+  public getPageContainer(): HTMLElement | undefined | null {
+    return this.pageContainer;
+  }
 
   /*MODAL (Resizing for responsiveness) */
-  private modals:  NodeListOf<Element> | undefined | null;
+  private modals: NodeListOf<Element> | undefined | null;
 
   /*VARIABLES*/
+  private mobileWidth: number;
   private mobileResponsive: boolean; // TRUE = MOBILE
   private mobileStatus: boolean;
 
-  public isMobileResponsive(): boolean { return this.mobileResponsive;}
-  public isMobileModeActive(): boolean { return this.mobileStatus;}
+  public isMobileResponsive(): boolean {
+    return this.mobileResponsive;
+  }
+  public isMobileModeActive(): boolean {
+    return this.mobileStatus;
+  }
 
-  constructor() {
+  constructor(width: number) {
+    this.mobileWidth = width;
     /*MENU STUFF*/
     this.menuNavbar = document.getElementById('id-navbar');
     this.menuRight = document.getElementById('id-menu-right-1');
@@ -167,12 +178,12 @@ export class ResponsiveManager {
     const width = window.innerWidth;
     /*MOBILE MODE HANDLING*/
     if (
-      (width < 800 || this.mobileResponsive === true) &&
+      (width < this.mobileWidth || this.mobileResponsive === true) &&
       this.mobileStatus === false
     ) {
       this.mobileMode(true);
     } else if (
-      width > 800 &&
+      width > this.mobileWidth &&
       this.mobileResponsive === false &&
       this.mobileStatus === true
     ) {
@@ -180,9 +191,8 @@ export class ResponsiveManager {
     }
     /*MENU HANDLING*/
     if (
-        (width < 800 ||
-        this.mobileResponsive === true) &&
-        this.menuStatus === false
+      (width < this.mobileWidth || this.mobileResponsive === true) &&
+      this.menuStatus === false
     ) {
       this.menuLeft?.classList.add('hidden');
       this.menuRight?.classList.add('hidden');
@@ -190,15 +200,14 @@ export class ResponsiveManager {
       this.mainContentContainer?.classList.remove('div_center_menu_open');
     }
     if (
-        (width < 800 ||
-        this.mobileResponsive === true) &&
-        this.menuStatus === true
+      (width < this.mobileWidth || this.mobileResponsive === true) &&
+      this.menuStatus === true
     ) {
       this.menuLeft?.classList.remove('hidden');
       this.menuRight?.classList.remove('hidden');
       this.mainContentContainer?.classList.add('div_center_menu_open');
     } else if (
-      width > 800 &&
+      width > this.mobileWidth &&
       this.mobileResponsive === false &&
       this.menuStatus === false
     ) {
@@ -207,7 +216,7 @@ export class ResponsiveManager {
       this.menuOpenerContainer?.classList.add('hidden');
       this.mainContentContainer?.classList.remove('div_center_menu_open');
     } else if (
-      width > 800 &&
+      width > this.mobileWidth &&
       this.mobileResponsive === false &&
       this.menuStatus === true
     ) {

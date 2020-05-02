@@ -1,29 +1,38 @@
 {
   "resolveJsonModule": true,
   "compilerOptions": {
+    "typeRoots": ["node_modules/@types"],
     "rootDir": ".",
     "outDir": "build",
+    "target": "es6",
+    "module": "ES6",
+    "moduleResolution": "node",
+    "removeComments": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ES6",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "pretty": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2018",
     "lib": [
-      "es2018",
-      "dom" 
+      "es6",
+      "dom",
+      "dom.iterable"
     ],
+    "types": [
+      "leaflet",
+      "geojson"
+    ]
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
-  ],
+    "node_modules",
+    "build"
+  ]
 }

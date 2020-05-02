@@ -1,26 +1,41 @@
 {
-  "name": "",
-  "version": "0.0.0",
-  "description": "",
+  "name": "bikesharing",
+  "version": "0.1.0",
   "files": [
     "build",
+    "node_modules/leaflet/dist",
     "src"
   ],
-  "license": "Apache-2.0",
+  "license": "MIT",
   "keywords": [],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "check": "gts check",
-    "clean": "gts clean",
-    "compile": "tsc",
-    "fix": "gts fix",
-    "prepare": "npm.cmd run compile",
-    "pretest": "npm.cmd run compile",
-    "posttest": "npm.cmd run check"
+    "build": "npm run clean && tsc && npm run bundle:esm && npm run bundle:esm:min && npm run bundle:umd && npm run bundle:umd:min",
+    "clean": "del /q \"build/src\"",
+    "bundle:esm": "rollup ./build/src/app.js --file ./build/src/app.js --format esm --name bikesharing --config rollup.config.js",
+    "bundle:esm:min": "terser --ecma 6 --compress --mangle --module -o build/src/app.min.js -- build/src/app.js",
+    "bundle:umd": "rollup build/src/app.js --file build/src/app.umd.js --format umd --name bikesharing --config rollup.config.js",
+    "bundle:umd:min": "terser --ecma 6 --compress --mangle -o build/src/app.umd.min.js -- build/src/app.umd.js"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.1.0",
+    "@rollup/plugin-json": "^4.0.3",
+    "@rollup/plugin-node-resolve": "^7.1.3",
+    "@rollup/plugin-typescript": "^4.1.1",
+    "@types/node": "^10.0.3",
     "gts": "^2.0.0",
-    "typescript": "~3.8.0",
-    "@types/node": "^10.0.3"
-  }
+    "rollup": "^2.7.6",
+    "terser": "^4.6.13",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/geojson": "^7946.0.7",
+    "@types/leaflet": "^1.5.12",
+    "leaflet": "^1.6.0"
+  },
+  "main": "./build/src/app.js",
+  "module": "./build/src/app.min.js",
+  "unpkg": "./build/src/app.umd.min.js",
+  "types": "./build/src/app.d.ts",
+  "author": "Davide Cuni",
+  "description": "Bike sharing school project"
 }
