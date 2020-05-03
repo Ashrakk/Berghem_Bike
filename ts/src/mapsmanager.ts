@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 export class MapsManager {
   private map: L.Map | undefined | null;
   private mapDiv: HTMLElement | undefined | null;
-  private mapCenter: L.LatLng | undefined | null;
+  private mapBounds: L.LatLngBounds | undefined | null;
   private zoomLevel: number | undefined | null;
 
   constructor() {
@@ -12,20 +12,24 @@ export class MapsManager {
 
   private init() {
     this.mapDiv = document.getElementById('map');
-    this.mapCenter = new L.LatLng(0, 0);
-    this.zoomLevel = 1;
-
+    /*boundOne boundTwo zoomLevel should be retrieved by ajax call*/
+    let boundOne = new L.LatLng(45.681539, 9.622572);
+    let boundTwo = new L.LatLng(45.710315, 9.729688);
+    this.zoomLevel = 14;
+    this.mapBounds = new L.LatLngBounds(boundOne, boundTwo);
+    
     /*CREATE MAP*/
     if (this.mapDiv != undefined) {
-      this.map = new L.Map('map').setView(this.mapCenter, this.zoomLevel);
-      console.log(this.map);
-
+      this.map = new L.Map('map')
+      this.map.fitBounds(this.mapBounds);
+      this.map.setZoom(this.zoomLevel);
       L.tileLayer(
         'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
         {
           attribution:
             'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
           maxZoom: 18,
+          minZoom: 13,
           id: 'mapbox/streets-v11',
           tileSize: 512,
           zoomOffset: -1,
@@ -33,6 +37,7 @@ export class MapsManager {
             'pk.eyJ1IjoiZGF2aWRlY3VuaSIsImEiOiJjazllNXpxNDIwOWo1M2dxbHllaGFyNzZxIn0.PuLUAJcKKJ4q46wSH_PmAg',
         }
       ).addTo(this.map);
+
     }
   }
 

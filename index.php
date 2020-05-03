@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="./ts/node_modules/leaflet/dist/leaflet.css">
     <link rel="stylesheet" type="text/css" href="style.css">
 
-    <script src="./ts/build/src/app.min.js" type="module"></script> 
+    <script src = "./ts/build/src/app.min.js" type="module"></script> 
 
     <script type="module">
       // IMPORTO LE CLASSI NECESSARIE
@@ -204,6 +204,7 @@
                   Acquista un abbonamento 
                 </li>
               </ul>
+              <div class="padding30"></div>
               <div class="padding30"></div>
               <h2>
                 TARIFFE E ABBONAMENTI
