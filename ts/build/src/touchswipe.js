@@ -43,18 +43,18 @@ export class TouchSwipe {
         const xDiff = this.xDown - xUp;
         const yDiff = this.yDown - yUp;
         if (Math.abs(xDiff) > Math.abs(yDiff)) {
-            if (xDiff > (0 + this.swipeLenght)) {
+            if (xDiff > 0 + this.swipeLenght) {
                 this.onLeft();
             }
-            else if (xDiff < (0 - this.swipeLenght)) {
+            else if (xDiff < 0 - this.swipeLenght) {
                 this.onRight();
             }
         }
         else {
-            if (yDiff > (0 + this.swipeLenght)) {
+            if (yDiff > 0 + this.swipeLenght) {
                 this.onUp();
             }
-            else if (yDiff < (0 - this.swipeLenght)) {
+            else if (yDiff < 0 - this.swipeLenght) {
                 this.onDown();
             }
         }

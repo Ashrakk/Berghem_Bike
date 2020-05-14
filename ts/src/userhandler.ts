@@ -219,14 +219,22 @@ export class UserHandler
         str_password,
         (xmlRequest: XMLHttpRequest) => 
         {
-          //SAVE LOGGED IN STATUS
-          sessionStorage.setItem('logged', 'true');
-          this.responsive?.switchMenuType(true);
-          
-          if(this.responsive?.isMobileModeActive() == true)
-            this.notify?.showCurModalMsgField('Registrazione eseguita con successo, un\'email di verifica è stata inviata alla tua casella di posta', true, true);
+          let result = xmlRequest.responseText;
+          if(result == 'true')
+          {
+            //SAVE LOGGED IN STATUS
+            sessionStorage.setItem('logged', 'true');
+            this.responsive?.switchMenuType(true);
+            
+            if(this.responsive?.isMobileModeActive() == true)
+              this.notify?.showCurModalMsgField('Registrazione eseguita con successo, un\'email di verifica è stata inviata alla tua casella di posta', true, true);
+            else
+              this.notify?.showMessageBox('Registrazione eseguita con successo, un\'email di verifica è stata inviata alla tua casella di posta');
+          }
           else
-            this.notify?.showMessageBox('Registrazione eseguita con successo, un\'email di verifica è stata inviata alla tua casella di posta');
+          {
+            this.notify?.showCurModalMsgField('Qualcosa è andato storto', false, false);
+          }
         });
     }
   }

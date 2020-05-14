@@ -1,9 +1,10 @@
 import * as L from 'leaflet';
 import { AjaxManager }  from './ajaxmanager.js';
 
-class customMarker
+class CustomMarker
 {
-  public icon: L.Icon | undefined;
+  private icon: L.Icon | undefined;
+  public getIcon() { return this.icon as L.Icon<L.IconOptions>; }
 
   constructor(path: string)
   {
@@ -16,7 +17,7 @@ class customMarker
             iconUrl:      path,
             iconSize:     [20, 35],
             iconAnchor:   [10, 35],
-            popupAnchor:  [15, 0]
+            popupAnchor:  [0, -35]
           });
       }
     }
@@ -29,11 +30,13 @@ export class MapsManager {
   private mapBounds: L.LatLngBounds | undefined | null;
   private zoomLevel: number | undefined | null;
 
-  private markerGreen: customMarker;
-  private markerYellow: customMarker;
-  private markerRed: customMarker;
+  private markerGreen:  CustomMarker;
+  private markerYellow: CustomMarker;
+  private markerRed:    CustomMarker;
 
-  private markers: customMarker[] = [];
+  private markers: L.Marker[] = [];
+
+  private ajaxman: AjaxManager;
 
   constructor() 
   {
@@ -44,9 +47,11 @@ export class MapsManager {
     this.zoomLevel = 13;
     this.mapBounds = new L.LatLngBounds(boundOne, boundTwo);
 
-    this.markerGreen  = new customMarker('../../../images/common/map-marker-green.svg');
-    this.markerYellow = new customMarker('../../../images/common/map-marker-yellow.svg');
-    this.markerRed    = new customMarker('../../../images/common/map-marker-red.svg');
+    this.markerGreen  = new CustomMarker('./images/common/map-marker-green.svg');
+    this.markerYellow = new CustomMarker('./images/common/map-marker-orange.svg');
+    this.markerRed    = new CustomMarker('./images/common/map-marker-red.svg');
+
+    this.ajaxman = new AjaxManager();
 
     this.init();
   }
@@ -77,54 +82,64 @@ export class MapsManager {
         }
       ).addTo(this.map);
     }
+
+    this.reload(false);
   }
 
-  public reload()
+  public reload(adv: boolean)
   {
+    this.ajaxman.ajax_getMapMarkers((xmlRequest: XMLHttpRequest) => 
+    {
+      let xml = xmlRequest.responseXML;
+      let stations = xml?.documentElement.getElementsByTagName('Station');
+      let icon:   L.Icon;
+      let marker: L.Marker;
+      let popup:  L.Popup;
+      let IDStation;
+      let lat;
+      let lon;
+      let slots;
+      let available;
+      let name;
+      let addr;
 
-  }
-/*
-  function initMap() {
-      var map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(-33.863276, 151.207977),
-        zoom: 12
-      });
-      var infoWindow = new google.maps.InfoWindow;
+      if(stations != undefined &&
+        this.map != undefined)
+      {
+        for(let index = 0; index < stations?.length; index++ )
+        {
+          IDStation = stations?.item(index)?.getElementsByTagName('idst').item(0)?.innerHTML;
+          lat       = parseFloat(stations?.item(index)?.getElementsByTagName('lat').item(0)?.innerHTML       as string);
+          lon       = parseFloat(stations?.item(index)?.getElementsByTagName('lon').item(0)?.innerHTML       as string);
+          slots     = parseFloat(stations?.item(index)?.getElementsByTagName('slots').item(0)?.innerHTML     as string);
+          available = parseFloat(stations?.item(index)?.getElementsByTagName('available').item(0)?.innerHTML as string);
+          name      = stations?.item(index)?.getElementsByTagName('name').item(0)?.innerHTML;
+          addr      = stations?.item(index)?.getElementsByTagName('addr').item(0)?.innerHTML;
 
-        // Change this depending on the name of your PHP or XML file
-        downloadUrl('https://storage.googleapis.com/mapsdevsite/json/mapmarkers2.xml', function(data) {
-          var xml = data.responseXML;
-          var markers = xml.documentElement.getElementsByTagName('marker');
-          Array.prototype.forEach.call(markers, function(markerElem) {
-            var id = markerElem.getAttribute('id');
-            var name = markerElem.getAttribute('name');
-            var address = markerElem.getAttribute('address');
-            var type = markerElem.getAttribute('type');
-            var point = new google.maps.LatLng(
-                parseFloat(markerElem.getAttribute('lat')),
-                parseFloat(markerElem.getAttribute('lng')));
+          popup   = new L.Popup().setContent(`${name}<br>${addr}<br>Slot: ${available}/${slots}`);
+          
+          if(available < (slots * (1/3) ))
+          {
+            //RED MARKER
+            icon = this.markerRed.getIcon();
+          }
+          else if (available < (slots * (1/2) ))
+          {
+            //YELLOW MARKER
+            icon = this.markerYellow.getIcon();
+          }
+          else
+          {
+            //GREEN MARKER         
+            icon = this.markerGreen.getIcon();
+          }
 
-            var infowincontent = document.createElement('div');
-            var strong = document.createElement('strong');
-            strong.textContent = name
-            infowincontent.appendChild(strong);
-            infowincontent.appendChild(document.createElement('br'));
-
-            var text = document.createElement('text');
-            text.textContent = address
-            infowincontent.appendChild(text);
-            var icon = customLabel[type] || {};
-            var marker = new google.maps.Marker({
-              map: map,
-              position: point,
-              label: icon.label
-            });
-            marker.addListener('click', function() {
-              infoWindow.setContent(infowincontent);
-              infoWindow.open(map, marker);
-            });
-          });
-        });
+          marker  = new L.Marker([lat, lon], {icon: icon}).bindPopup(popup).openPopup();
+          marker.addTo(this.map);
+          this.markers.push(marker);
+        }
       }
-    */
+
+    });
+  }
 }

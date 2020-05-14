@@ -1,10 +1,7 @@
 <?php
-
 include_once 'dbmanager.php';
 
 class User {	
-
-    private static $dbm;
     private $logged;
     private $cur_session_id;
 
@@ -95,27 +92,8 @@ class User {
     
     public function __construct()
     {
-        //create instance of dbManager
-        if(is_null($this::$dbm))
-            $dbm = new DbManager();
-
-        $val = $dbm->init();
-
-        //if connected properly
-        if($val === true)
-        {
-            //do operations such as
-            //check for remember me token 
-        }
-        else
-        {
-            error_log('PDO DB CONNECTION ERROR!!!');
-        }
-
-
         $this->logged = false;
         $this->cur_session_id = session_id();
-        
     }
 
     public function register($tmp_username, $tmp_email, $tmp_passwd, $tmp_birthdate)
@@ -153,5 +131,4 @@ class User {
     {
         
     }
-}
-?>
+}?>

@@ -1,12 +1,21 @@
 import { ResponsiveManager } from './responsive.js';
 import { TouchSwipe } from './touchswipe.js';
+import { UserHandler } from './userhandler.js';
+import { Notification } from './notifications.js';
 export class UIManager {
     constructor(...allmodals) {
         this.modals = [];
-        this.responsive = new ResponsiveManager();
+        let logged = false;
+        let tmp = sessionStorage.getItem('logged');
+        if (tmp == 'true')
+            logged = true;
+        else
+            logged = false;
+        this.responsive = new ResponsiveManager(800, logged);
+        this.notify = new Notification(allmodals, this.responsive.getContentContainer());
+        this.userhandler = new UserHandler(this.responsive, this.notify, this.modals);
         this.pageContainer = this.responsive.getPageContainer();
-        this.modals = allmodals;
-        this.modalState = false;
+        this.modals = this.notify.getModals();
         this.init();
     }
     init() {
@@ -34,20 +43,29 @@ export class UIManager {
         }
         for (const modal of this.modals) {
             modal.onOpen(() => {
-                if (this.modalState === false) //OPEN MODAL
-                 {
+                if (modal.getState() === false) {
                     modal.openModal();
-                    this.modalState = true;
+                    modal.setState(true);
                 }
             });
             modal.onClose(() => {
-                if (this.modalState === true) //CLOSE MODAL
-                 {
+                if (modal.getState() === true) {
+                    this.notify.clearCurModalMsgField();
+                    this.notify.clearTimers('modal');
                     modal.closeModal();
-                    this.modalState = false;
+                    modal.setState(false);
                 }
             });
         }
+    }
+    submit_login() {
+        this.userhandler.submit_login();
+    }
+    submit_logout() {
+        this.userhandler.submit_logout();
+    }
+    submit_reg() {
+        this.userhandler.submit_registration();
     }
 }
 //# sourceMappingURL=uimanager.js.map

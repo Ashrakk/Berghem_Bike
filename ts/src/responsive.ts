@@ -17,6 +17,7 @@ export class ResponsiveManager {
   private mainContentContainer: HTMLElement;
   private allColumnsElements:   NodeListOf<Element> | undefined | null;
   private allRowElements:       NodeListOf<Element> | undefined | null;
+  private shadowElements:       NodeListOf<Element> | undefined | null;
   private allColumnsOriginalClasses: string[] = [];
   
   /*MODAL (Resizing for responsiveness) */
@@ -71,15 +72,20 @@ export class ResponsiveManager {
     this.allColumnsElements   = document.querySelectorAll(
       '.div_internal_column, .column_width_1e6, .column_width_1e5, .column_width_1e4, .column_width_1e3'
     );
-    this.allRowElements       = document.querySelectorAll('.div_internal_row');
+    this.allRowElements       = document.querySelectorAll('.div_internal_row:not(.flexColumn)');
+    this.shadowElements       = document.querySelectorAll('.boxshadow');
     this.mainContentContainer = document.getElementById('id-main-content-container') as HTMLElement;
 
     this.modals               = document.querySelectorAll('.modal_content');
     this.mobileResponsive     = false;
     this.mobileStatus         = false;
 
-    this.switchMenuType(menu_right_type);
     this.init();
+    this.switchMenuType(menu_right_type);
+
+    //SHOW PAGE
+    this.pageLoader?.classList.add('hidden');
+    this.pageContainer?.classList.remove('hidden');
   }
 
   private init() {
@@ -110,9 +116,6 @@ export class ResponsiveManager {
     this.menuOpener?.addEventListener('click', () => {
       this.toggleMenu();
     });
-
-    this.pageLoader?.classList.add('hidden');
-    this.pageContainer?.classList.remove('hidden');
   }
 
   private mobileCheck(): boolean {
@@ -135,10 +138,12 @@ export class ResponsiveManager {
   private mobileMode( status: boolean ) 
   {
     // MOBILE MODE
-    if (status === true && status !== this.mobileStatus) {
+    if (status === true && status !== this.mobileStatus) 
+    {
       if (
         this.allColumnsElements != undefined &&
         this.allRowElements != undefined &&
+        this.shadowElements != undefined &&
         this.modals != undefined
       ) {
         for (let index = 0; index < this.allColumnsElements?.length; index++) {
@@ -153,40 +158,49 @@ export class ResponsiveManager {
             );
           this.allColumnsElements.item(index).classList.add('paddingBottom20');
         }
+        //ADD flexColumns TO Rows
         for (let index = 0; index < this.allRowElements?.length; index++) {
           this.allRowElements.item(index).classList.add('flexColumn');
         }
+        //REMOVE boxshadow FROM shadowElements
+        for (let index = 0; index < this.shadowElements?.length; index++) {
+          this.shadowElements.item(index).classList.remove('boxshadow');
+        }
+        //ADD modal_content_mobile TO modals
         for (let index = 0; index < this.modals?.length; index++) {
           this.modals.item(index).classList.add('modal_content_mobile');
         }
       }
       this.mobileStatus = status;
-      return;
-    } else if (status === false && status !== this.mobileStatus) {
+    } 
+    else if (status === false && status !== this.mobileStatus) 
+    {
       // DESKTOP MODE
       this.menuOpener?.classList.remove('menu-right-dropdown-responsive');
       if (
         this.allColumnsElements != undefined &&
         this.allRowElements != undefined &&
+        this.shadowElements != undefined &&
         this.modals != undefined
       ) {
+        //RESTORE ORIGINAL CLASSES of Columns
         for (let index = 0; index < this.allColumnsElements?.length; index++) {
-          this.allColumnsElements
-            .item(index)
-            .classList.remove('paddingBottom20');
-          this.allColumnsElements.item(
-            index
-          ).classList.value = this.allColumnsOriginalClasses[index];
+          this.allColumnsElements.item(index).classList.value = this.allColumnsOriginalClasses[index];
         }
+        //ADD boxshadow TO shadowElements
+        for (let index = 0; index < this.shadowElements?.length; index++) {
+          this.shadowElements.item(index).classList.add('boxshadow');
+        }
+        //REMOVE FlexColumn FROM Rows
         for (let index = 0; index < this.allRowElements?.length; index++) {
           this.allRowElements.item(index).classList.remove('flexColumn');
         }
+        //REMOVE modal_content_mobile FROM modals
         for (let index = 0; index < this.modals?.length; index++) {
           this.modals.item(index).classList.remove('modal_content_mobile');
         }
       }
       this.mobileStatus = status;
-      return;
     }
   }
 
@@ -195,16 +209,15 @@ export class ResponsiveManager {
   {
     const width = window.innerWidth;
     /*MOBILE MODE HANDLING*/
-    if (
-      (width < this.mobileWidth || this.mobileResponsive === true) &&
-      this.mobileStatus === false
-    ) {
+    if ((width < this.mobileWidth || this.mobileResponsive === true) &&
+        this.mobileStatus === false)
+    {
       this.mobileMode(true);
     } else if (
       width > this.mobileWidth &&
       this.mobileResponsive === false &&
-      this.mobileStatus === true
-    ) {
+      this.mobileStatus === true) 
+    {
       this.mobileMode(false);
     }
     /*MENU HANDLING*/

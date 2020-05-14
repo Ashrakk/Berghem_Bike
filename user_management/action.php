@@ -1,6 +1,5 @@
 <?php
     include_once 'user.php';
-    
     /* ------- USERS CACHE ------- */
     static $users = array();
 
@@ -9,31 +8,25 @@
         session_start();
     }
 
+    //check for auth cookie in DB
     if(isset($_POST['check_user']))
     {
-        //check for auth cookie
-        //ask db
-        //give response
+
     }
 
     if(isset($_POST['get_map_data']))
     {
-        //ask db
+        Header('Content-type: text/xml');
+        $xml = DbManager::query_map();
+        echo $xml->asXML();
     }
 
-    if(isset($_POST['get_map_data_adv']))
-    {
-        //check user in cache, logged in?
-        //ask db
-    }
-
+    //get session id
+    //find user with correct session id
+    //delete user from cache
+    //destroy session
     if(isset($_POST['submit_logout']))
     {
-        //get session id
-        //find user with correct session id
-        //delete user from cache
-        //destroy session
-
         $ses_id = session_id();
         if(!empty($users))
         {
@@ -76,7 +69,6 @@
                 }        
             }
         }
-
         if( !empty($emailusername) and 
             !empty($password))
         {
@@ -98,8 +90,6 @@
             }
 
             echo $result;
-
         }
     }
-
 ?>

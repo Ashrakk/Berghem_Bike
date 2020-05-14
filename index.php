@@ -1,7 +1,6 @@
 <?php
   include_once 'common.php';
 ?>
-
 <!DOCTYPE HTML>
 <html>
   <head>
@@ -13,14 +12,32 @@
           initial-scale = 1.0,
           minimum-scale = 0.75,
           maximum-scale = 10.0">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
   
     <link rel="stylesheet" type="text/css" href="./css/leaflet.css">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
 
     <script src = "./ts/build/src/app.min.js" type="module"></script>  
-    <!--
     <script src = "./ts/build/src/uimanager.js" type="module"></script> 
     <script src = "./ts/build/src/modal.js" type="module"></script> 
+    <!--
     -->
     <script>
       var uimanager;
@@ -28,9 +45,9 @@
 
     <script type="module">
       // IMPORTO LE CLASSI NECESSARIE
-      import { MapsManager, UIManager, Modal } from './ts/build/src/app.min.js';
-      //import { UIManager } from './ts/build/src/uimanager.js';
-      //import { Modal } from './ts/build/src/modal.js';
+      import { MapsManager } from './ts/build/src/app.min.js';
+      import { UIManager } from './ts/build/src/uimanager.js';
+      import { Modal } from './ts/build/src/modal.js';
 
       initialize();
 
@@ -55,6 +72,8 @@
         buttLogout.addEventListener('click', () => {
           uimanager.submit_logout();
         });
+
+        let mapsman = new MapsManager();
       }
     </script>
 
@@ -178,16 +197,16 @@
           </div>
           <!-- I VANTAGGI DEL BIKE SHARING 3 COLONNE -->
           <div class="div_internal_row">
-            <div class="div_internal_column column_width_1e4">
+            <div class="div_internal_column column_width_1e4 boxshadow">
               <img src = "images/common/health.png" class = "icon">
               <h3 class="text_center">
               SOSTENIBILE E SALUTARE
               </h3>
               <p class="margin0">
-              Ridurre la tua impronta sull’ambiente può sembrare insignificante, ma è vitale per un futuro più prospero!
+              Ridurre la tua impronta sull’ambiente può sembrare insignificante, ma è vitale per un futuro più prospero, l'unione fa la forza!
               </p>
             </div>
-            <div class="div_internal_column  column_width_1e4">
+            <div class="div_internal_column  column_width_1e4 boxshadow">
               <img src = "images/common/bicycle.png" class = "icon">
               <h3 class="text_center">
               UNA SOLUZIONE EFFICENTE
@@ -196,13 +215,13 @@
               Pensato per viaggi di prossimità dove i mezzi pubblici non possono arrivare.
               </p>
             </div>
-            <div class="div_internal_column column_width_1e4">
+            <div class="div_internal_column column_width_1e4 boxshadow">
             <img src = "images/common/helmet.svg" class = "icon">
               <h3 class="text_center">
               MENO INCIDENTI
               </h3>
               <p class="margin0">
-              La statistica afferma che con un maggiore traffico di biciclette si riduce la probabilità di incidenti!
+              Diversi studi affermano che con un maggiore traffico di biciclette si riduce la probabilità di incidenti
               </p>
             </div>
           </div>
@@ -213,18 +232,16 @@
               <h2>
                 COME FUNZIONA?
               </h2>
-              <ul class="text_left textbig_1 margin0">
-                <li>
-                  Registrati sul sito
-                </li>
-                <li>
-                  Aggiungi un metodo di pagamento
-                </li>
-                <li>
-                  Scegli un abbonamento 
-                </li>
-              </ul>
-
+              <div class="separator textbig_1">
+                Registrati sul sito
+              </div>
+              <div class="separator textbig_1">
+                Scegli un abbonamento <br> 
+                oppure usufruisci della tariffa oraria
+              </div>
+              <div class="separator textbig_1">
+                Aggiungi un metodo di pagamento preferito
+              </div>  
             </div>
           </div>
           <div class="spacer4em"></div>
@@ -238,11 +255,11 @@
           <!-- TARIFFE 3 COLUMNS -->
           <div class="div_internal_row">
             <div class="div_internal_column column_width_1e4">
-              <div class="tariffa">
+              <div class="tariffa boxshadow">
                 <h3 class="heading">
                 ORARIA
                 </h3>
-                <p class="price textbold margin0">
+                <p class="price text_bold margin0">
                   €0.25/ora
                 </p>
                 <p class="comment">
@@ -250,12 +267,12 @@
                 </p>
               </div>
             </div>
-            <div class="div_internal_column  column_width_1e4">
-             <div class="tariffa">
+            <div class="div_internal_column  column_width_1e4 ">
+             <div class="tariffa boxshadow">
                 <h3 class="heading">
                 MENSILE
                 </h3>
-                <p class="price textbold margin0">
+                <p class="price text_bold margin0">
                   €4.99/mese
                 </p>
                 <p class="comment">
@@ -264,11 +281,11 @@
               </div>
             </div>
             <div class="div_internal_column column_width_1e4">
-              <div class="tariffa">
+              <div class="tariffa boxshadow">
                 <h3 class="heading">
                 ANNUALE
                 </h3>
-                <p class="price textbold margin0">
+                <p class="price text_bold margin0">
                   €24.99/anno
                 </p>
                 <p class="comment">

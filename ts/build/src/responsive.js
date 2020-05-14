@@ -1,51 +1,70 @@
 export class ResponsiveManager {
-    constructor() {
+    constructor(width, menu_right_type) {
+        var _a, _b;
         this.allColumnsOriginalClasses = [];
-        /*MENU STUFF*/
+        this.mobileWidth = width;
         this.menuNavbar = document.getElementById('id-navbar');
-        this.menuRight = document.getElementById('id-menu-right-1');
+        this.menuRightDefault = document.getElementById('id-menu-right-default');
+        this.menuRightLogged = document.getElementById('id-menu-right-logged');
         this.menuLeft = document.getElementById('id-menu-left');
         this.menuOpenerContainer = document.getElementById('id-menu-right-dropdown-container');
         this.menuOpener = document.getElementById('id-menu-right-dropdown');
         this.menuLogo = document.getElementById('id-logo');
         this.menuStatus = false;
-        /*PAGE STUFF*/
         this.pageContainer = document.getElementById('id-page-container');
         this.pageLoader = document.getElementById('id-page-loader');
         this.allColumnsElements = document.querySelectorAll('.div_internal_column, .column_width_1e6, .column_width_1e5, .column_width_1e4, .column_width_1e3');
-        this.allRowElements = document.querySelectorAll('.div_internal_row');
+        this.allRowElements = document.querySelectorAll('.div_internal_row:not(.flexColumn)');
+        this.shadowElements = document.querySelectorAll('.boxshadow');
         this.mainContentContainer = document.getElementById('id-main-content-container');
         this.modals = document.querySelectorAll('.modal_content');
         this.mobileResponsive = false;
         this.mobileStatus = false;
         this.init();
+        this.switchMenuType(menu_right_type);
+        (_a = this.pageLoader) === null || _a === void 0 ? void 0 : _a.classList.add('hidden');
+        (_b = this.pageContainer) === null || _b === void 0 ? void 0 : _b.classList.remove('hidden');
     }
-    isMenuOpen() { return this.menuStatus; }
-    getMenuNavbar() { return this.menuNavbar; }
-    getPageContainer() { return this.pageContainer; }
-    isMobileResponsive() { return this.mobileResponsive; }
-    isMobileModeActive() { return this.mobileStatus; }
+    isMenuOpen() {
+        return this.menuStatus;
+    }
+    getMenuNavbar() {
+        return this.menuNavbar;
+    }
+    getPageContainer() {
+        return this.pageContainer;
+    }
+    getContentContainer() {
+        return this.mainContentContainer;
+    }
+    getCurrentRightMenu() {
+        return this.currentRightMenu;
+    }
+    isMobileResponsive() {
+        return this.mobileResponsive;
+    }
+    isMobileModeActive() {
+        return this.mobileStatus;
+    }
     init() {
-        //save original column classes
-        var _a, _b, _c, _d;
+        var _a, _b;
         if (this.allColumnsElements != undefined) {
             for (let index = 0; index < ((_a = this.allColumnsElements) === null || _a === void 0 ? void 0 : _a.length); index++) {
                 this.allColumnsOriginalClasses.push(this.allColumnsElements.item(index).classList.value);
             }
         }
-        //Returns true if mobile
         this.mobileResponsive = this.mobileCheck();
         this.mobileStatus = false;
-        //fix page
         this.handleResponsiveness();
         window.addEventListener('resize', (evt) => {
+            this.handleResponsiveness();
+        });
+        window.addEventListener('pageshow', (evt) => {
             this.handleResponsiveness();
         });
         (_b = this.menuOpener) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
             this.toggleMenu();
         });
-        (_c = this.pageLoader) === null || _c === void 0 ? void 0 : _c.classList.add('hidden');
-        (_d = this.pageContainer) === null || _d === void 0 ? void 0 : _d.classList.remove('hidden');
     }
     mobileCheck() {
         let isMobile = false;
@@ -55,13 +74,12 @@ export class ResponsiveManager {
         }
         return isMobile;
     }
-    mobileMode(status //toggle between mobile and desktop mode
-    ) {
-        var _a, _b, _c, _d, _e, _f;
-        // MOBILE MODE
+    mobileMode(status) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         if (status === true && status !== this.mobileStatus) {
             if (this.allColumnsElements != undefined &&
                 this.allRowElements != undefined &&
+                this.shadowElements != undefined &&
                 this.modals != undefined) {
                 for (let index = 0; index < ((_a = this.allColumnsElements) === null || _a === void 0 ? void 0 : _a.length); index++) {
                     this.allColumnsElements
@@ -72,113 +90,125 @@ export class ResponsiveManager {
                 for (let index = 0; index < ((_b = this.allRowElements) === null || _b === void 0 ? void 0 : _b.length); index++) {
                     this.allRowElements.item(index).classList.add('flexColumn');
                 }
-                for (let index = 0; index < ((_c = this.modals) === null || _c === void 0 ? void 0 : _c.length); index++) {
+                for (let index = 0; index < ((_c = this.shadowElements) === null || _c === void 0 ? void 0 : _c.length); index++) {
+                    this.shadowElements.item(index).classList.remove('boxshadow');
+                }
+                for (let index = 0; index < ((_d = this.modals) === null || _d === void 0 ? void 0 : _d.length); index++) {
                     this.modals.item(index).classList.add('modal_content_mobile');
                 }
             }
             this.mobileStatus = status;
-            return;
         }
         else if (status === false && status !== this.mobileStatus) {
-            // DESKTOP MODE
+            (_e = this.menuOpener) === null || _e === void 0 ? void 0 : _e.classList.remove('menu-right-dropdown-responsive');
             if (this.allColumnsElements != undefined &&
                 this.allRowElements != undefined &&
+                this.shadowElements != undefined &&
                 this.modals != undefined) {
-                for (let index = 0; index < ((_d = this.allColumnsElements) === null || _d === void 0 ? void 0 : _d.length); index++) {
-                    this.allColumnsElements
-                        .item(index)
-                        .classList.remove('paddingBottom20');
+                for (let index = 0; index < ((_f = this.allColumnsElements) === null || _f === void 0 ? void 0 : _f.length); index++) {
                     this.allColumnsElements.item(index).classList.value = this.allColumnsOriginalClasses[index];
                 }
-                for (let index = 0; index < ((_e = this.allRowElements) === null || _e === void 0 ? void 0 : _e.length); index++) {
+                for (let index = 0; index < ((_g = this.shadowElements) === null || _g === void 0 ? void 0 : _g.length); index++) {
+                    this.shadowElements.item(index).classList.add('boxshadow');
+                }
+                for (let index = 0; index < ((_h = this.allRowElements) === null || _h === void 0 ? void 0 : _h.length); index++) {
                     this.allRowElements.item(index).classList.remove('flexColumn');
                 }
-                for (let index = 0; index < ((_f = this.modals) === null || _f === void 0 ? void 0 : _f.length); index++) {
+                for (let index = 0; index < ((_j = this.modals) === null || _j === void 0 ? void 0 : _j.length); index++) {
                     this.modals.item(index).classList.remove('modal_content_mobile');
                 }
             }
             this.mobileStatus = status;
-            return;
         }
     }
     handleResponsiveness() {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
         const width = window.innerWidth;
-        /*MOBILE MODE HANDLING*/
-        if ((width < 800 || this.mobileResponsive === true) &&
+        if ((width < this.mobileWidth || this.mobileResponsive === true) &&
             this.mobileStatus === false) {
             this.mobileMode(true);
         }
-        else if (width > 800 &&
+        else if (width > this.mobileWidth &&
             this.mobileResponsive === false &&
             this.mobileStatus === true) {
             this.mobileMode(false);
         }
-        /*MENU HANDLING*/
-        if ((width < 800 ||
-            this.mobileResponsive === true) &&
+        if ((width < this.mobileWidth || this.mobileResponsive === true) &&
             this.menuStatus === false) {
             (_a = this.menuLeft) === null || _a === void 0 ? void 0 : _a.classList.add('hidden');
-            (_b = this.menuRight) === null || _b === void 0 ? void 0 : _b.classList.add('hidden');
+            (_b = this.currentRightMenu) === null || _b === void 0 ? void 0 : _b.classList.add('hidden');
             (_c = this.menuOpenerContainer) === null || _c === void 0 ? void 0 : _c.classList.remove('hidden');
             (_d = this.mainContentContainer) === null || _d === void 0 ? void 0 : _d.classList.remove('div_center_menu_open');
         }
-        if ((width < 800 ||
-            this.mobileResponsive === true) &&
+        if ((width < this.mobileWidth || this.mobileResponsive === true) &&
             this.menuStatus === true) {
             (_e = this.menuLeft) === null || _e === void 0 ? void 0 : _e.classList.remove('hidden');
-            (_f = this.menuRight) === null || _f === void 0 ? void 0 : _f.classList.remove('hidden');
+            (_f = this.currentRightMenu) === null || _f === void 0 ? void 0 : _f.classList.remove('hidden');
             (_g = this.mainContentContainer) === null || _g === void 0 ? void 0 : _g.classList.add('div_center_menu_open');
         }
-        else if (width > 800 &&
+        else if (width > this.mobileWidth &&
             this.mobileResponsive === false &&
             this.menuStatus === false) {
             (_h = this.menuLeft) === null || _h === void 0 ? void 0 : _h.classList.remove('hidden');
-            (_j = this.menuRight) === null || _j === void 0 ? void 0 : _j.classList.remove('hidden');
+            (_j = this.currentRightMenu) === null || _j === void 0 ? void 0 : _j.classList.remove('hidden');
             (_k = this.menuOpenerContainer) === null || _k === void 0 ? void 0 : _k.classList.add('hidden');
             (_l = this.mainContentContainer) === null || _l === void 0 ? void 0 : _l.classList.remove('div_center_menu_open');
         }
-        else if (width > 800 &&
+        else if (width > this.mobileWidth &&
             this.mobileResponsive === false &&
             this.menuStatus === true) {
             (_m = this.menuLeft) === null || _m === void 0 ? void 0 : _m.classList.remove('hidden');
-            (_o = this.menuRight) === null || _o === void 0 ? void 0 : _o.classList.remove('hidden');
+            (_o = this.currentRightMenu) === null || _o === void 0 ? void 0 : _o.classList.remove('hidden');
             (_p = this.menuOpenerContainer) === null || _p === void 0 ? void 0 : _p.classList.add('hidden');
             this.toggleMenu();
         }
     }
     toggleMenu() {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
         if (this.menuStatus === true) {
-            //if OPEN, then CLOSE
             (_a = this.mainContentContainer) === null || _a === void 0 ? void 0 : _a.classList.remove('div_center_menu_open');
             (_b = this.menuNavbar) === null || _b === void 0 ? void 0 : _b.classList.remove('div_navbar_menu_open', 'anim_menuFadeIn');
             (_c = this.menuNavbar) === null || _c === void 0 ? void 0 : _c.classList.add('anim_menuFadeOut');
-            (_d = this.menuLogo) === null || _d === void 0 ? void 0 : _d.classList.remove('logo_menu_open');
-            (_e = this.menuLeft) === null || _e === void 0 ? void 0 : _e.classList.remove('general_menu_open');
-            (_f = this.menuLeft) === null || _f === void 0 ? void 0 : _f.classList.add('hidden');
-            (_g = this.menuRight) === null || _g === void 0 ? void 0 : _g.classList.add('hidden');
-            (_h = this.menuRight) === null || _h === void 0 ? void 0 : _h.classList.remove('general_menu_open', 'menu_right_open');
+            (_d = this.menuLeft) === null || _d === void 0 ? void 0 : _d.classList.remove('general_menu_open');
+            (_e = this.menuLeft) === null || _e === void 0 ? void 0 : _e.classList.add('hidden');
+            (_f = this.currentRightMenu) === null || _f === void 0 ? void 0 : _f.classList.add('hidden');
+            (_g = this.menuRightDefault) === null || _g === void 0 ? void 0 : _g.classList.remove('general_menu_open', 'menu_right_open');
+            (_h = this.menuRightLogged) === null || _h === void 0 ? void 0 : _h.classList.remove('general_menu_open', 'menu_right_open');
             if (this.menuLogo != undefined && this.menuOpener != undefined) {
                 (_j = this.menuOpenerContainer) === null || _j === void 0 ? void 0 : _j.insertAdjacentElement('beforeend', this.menuOpener);
                 (_k = this.menuNavbar) === null || _k === void 0 ? void 0 : _k.insertAdjacentElement('afterbegin', this.menuLogo);
             }
-        } //if CLOSED, then OPEN
-        else {
-            (_l = this.mainContentContainer) === null || _l === void 0 ? void 0 : _l.classList.add('div_center_menu_open');
-            (_m = this.menuNavbar) === null || _m === void 0 ? void 0 : _m.classList.remove('anim_menuFadeOut');
-            (_o = this.menuNavbar) === null || _o === void 0 ? void 0 : _o.classList.add('div_navbar_menu_open', 'anim_menuFadeIn');
-            (_p = this.menuLogo) === null || _p === void 0 ? void 0 : _p.classList.add('logo_menu_open');
-            (_q = this.menuLeft) === null || _q === void 0 ? void 0 : _q.classList.add('general_menu_open');
-            (_r = this.menuRight) === null || _r === void 0 ? void 0 : _r.classList.add('general_menu_open', 'menu_right_open');
-            (_s = this.menuLeft) === null || _s === void 0 ? void 0 : _s.classList.remove('hidden');
-            (_t = this.menuRight) === null || _t === void 0 ? void 0 : _t.classList.remove('hidden');
-            if (this.menuLogo != undefined && this.menuOpener != undefined) {
-                (_u = this.menuLeft) === null || _u === void 0 ? void 0 : _u.insertAdjacentElement('afterbegin', this.menuOpener);
-                (_v = this.menuNavbar) === null || _v === void 0 ? void 0 : _v.insertAdjacentElement('beforeend', this.menuLogo);
-            }
+            (_l = this.menuOpener) === null || _l === void 0 ? void 0 : _l.classList.remove('menu-right-dropdown-responsive');
         }
-        this.menuStatus = !this.menuStatus; //TOGGLE
+        else {
+            (_m = this.mainContentContainer) === null || _m === void 0 ? void 0 : _m.classList.add('div_center_menu_open');
+            (_o = this.menuNavbar) === null || _o === void 0 ? void 0 : _o.classList.remove('anim_menuFadeOut');
+            (_p = this.menuNavbar) === null || _p === void 0 ? void 0 : _p.classList.add('div_navbar_menu_open', 'anim_menuFadeIn');
+            (_q = this.menuLeft) === null || _q === void 0 ? void 0 : _q.classList.add('general_menu_open');
+            (_r = this.menuRightDefault) === null || _r === void 0 ? void 0 : _r.classList.add('general_menu_open', 'menu_right_open');
+            (_s = this.menuRightLogged) === null || _s === void 0 ? void 0 : _s.classList.add('general_menu_open', 'menu_right_open');
+            (_t = this.menuLeft) === null || _t === void 0 ? void 0 : _t.classList.remove('hidden');
+            (_u = this.currentRightMenu) === null || _u === void 0 ? void 0 : _u.classList.remove('hidden');
+            if (this.menuLogo != undefined && this.menuOpener != undefined) {
+                (_v = this.menuLeft) === null || _v === void 0 ? void 0 : _v.insertAdjacentElement('afterbegin', this.menuOpener);
+                (_w = this.menuNavbar) === null || _w === void 0 ? void 0 : _w.insertAdjacentElement('beforeend', this.menuLogo);
+            }
+            (_x = this.menuOpener) === null || _x === void 0 ? void 0 : _x.classList.add('menu-right-dropdown-responsive');
+        }
+        this.menuStatus = !this.menuStatus;
+    }
+    switchMenuType(menu_type) {
+        var _a, _b, _c;
+        if (menu_type == true) {
+            this.currentRightMenu = this.menuRightLogged;
+            (_a = this.menuRightDefault) === null || _a === void 0 ? void 0 : _a.classList.add('hidden');
+        }
+        if (menu_type == false) {
+            this.currentRightMenu = this.menuRightDefault;
+            (_b = this.menuRightLogged) === null || _b === void 0 ? void 0 : _b.classList.add('hidden');
+        }
+        (_c = this.currentRightMenu) === null || _c === void 0 ? void 0 : _c.classList.remove('hidden');
+        this.handleResponsiveness();
     }
 }
 //# sourceMappingURL=responsive.js.map

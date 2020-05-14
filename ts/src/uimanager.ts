@@ -3,7 +3,7 @@ import {TouchSwipe}         from './touchswipe.js';
 import {UserHandler}        from './userhandler.js';
 import {Notification}       from './notifications.js';
 import {Modal}              from './modal.js';
-import {MapsManager}        from './mapsmanager.js';
+//import {MapsManager}        from './mapsmanager.js';
 
 export class UIManager {
   private responsive:       ResponsiveManager;
@@ -32,7 +32,7 @@ export class UIManager {
     this.init();
 
     //INIT MAP
-    let mapsman = new MapsManager();
+    //let mapsman = new MapsManager();
   }
 
   /**
