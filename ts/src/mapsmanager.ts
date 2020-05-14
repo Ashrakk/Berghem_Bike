@@ -1,4 +1,27 @@
 import * as L from 'leaflet';
+import { AjaxManager }  from './ajaxmanager.js';
+
+class customMarker
+{
+  public icon: L.Icon | undefined;
+
+  constructor(path: string)
+  {
+    if(path != undefined)
+    {
+      if(path != '')
+      {
+        this.icon = L.icon(
+          {
+            iconUrl:      path,
+            iconSize:     [20, 35],
+            iconAnchor:   [10, 35],
+            popupAnchor:  [15, 0]
+          });
+      }
+    }
+  }
+};
 
 export class MapsManager {
   private map: L.Map | undefined | null;
@@ -6,29 +29,45 @@ export class MapsManager {
   private mapBounds: L.LatLngBounds | undefined | null;
   private zoomLevel: number | undefined | null;
 
-  constructor() {
-    this.init();
-  }
+  private markerGreen: customMarker;
+  private markerYellow: customMarker;
+  private markerRed: customMarker;
 
-  private init() {
+  private markers: customMarker[] = [];
+
+  constructor() 
+  {
     this.mapDiv = document.getElementById('map');
     /*boundOne boundTwo zoomLevel should be retrieved by ajax call*/
     let boundOne = new L.LatLng(45.681539, 9.622572);
     let boundTwo = new L.LatLng(45.710315, 9.729688);
-    this.zoomLevel = 14;
+    this.zoomLevel = 13;
     this.mapBounds = new L.LatLngBounds(boundOne, boundTwo);
-    
+
+    this.markerGreen  = new customMarker('../../../images/common/map-marker-green.svg');
+    this.markerYellow = new customMarker('../../../images/common/map-marker-yellow.svg');
+    this.markerRed    = new customMarker('../../../images/common/map-marker-red.svg');
+
+    this.init();
+  }
+
+  private init()
+  {
     /*CREATE MAP*/
-    if (this.mapDiv != undefined) {
+    if (this.mapDiv     != undefined &&
+        this.mapBounds  != undefined &&
+        this.zoomLevel  != undefined) 
+    {
       this.map = new L.Map('map')
       this.map.fitBounds(this.mapBounds);
+      this.map.setMaxBounds(this.mapBounds);
       this.map.setZoom(this.zoomLevel);
       L.tileLayer(
         'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
         {
           attribution:
             'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
+          maxZoom: 16,
           minZoom: 13,
           id: 'mapbox/streets-v11',
           tileSize: 512,
@@ -37,28 +76,14 @@ export class MapsManager {
             'pk.eyJ1IjoiZGF2aWRlY3VuaSIsImEiOiJjazllNXpxNDIwOWo1M2dxbHllaGFyNzZxIn0.PuLUAJcKKJ4q46wSH_PmAg',
         }
       ).addTo(this.map);
-
     }
   }
 
-  /*
-  function downloadUrl(url, callback) {
-    var request = window.ActiveXObject ?
-        new ActiveXObject('Microsoft.XMLHTTP') :
-        new XMLHttpRequest;
+  public reload()
+  {
 
-    request.onreadystatechange = function() {
-      if (request.readyState == 4) {
-        request.onreadystatechange = doNothing;
-        callback(request, request.status);
-      }
-    };
-
-    request.open('GET', url, true);
-    request.send(null);
   }
-  */
-  /*
+/*
   function initMap() {
       var map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(-33.863276, 151.207977),

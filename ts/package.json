@@ -9,7 +9,7 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "build": "npm run clean && tsc && npm run bundle:esm && npm run bundle:esm:min && npm run bundle:umd && npm run bundle:umd:min",
+    "build": "npm run clean && tsc && npm run bundle:esm && npm run bundle:esm:min ",
     "clean": "del /q \"build/src\"",
     "bundle:esm": "rollup ./build/src/app.js --file ./build/src/app.js --format esm --name bikesharing --config rollup.config.js",
     "bundle:esm:min": "terser --ecma 6 --compress --mangle --module -o build/src/app.min.js -- build/src/app.js",

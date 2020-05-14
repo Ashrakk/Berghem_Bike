@@ -1,15 +1,23 @@
 export class Modal {
-  private openButton: HTMLElement | undefined | null;
-  private closeButton: HTMLElement | undefined | null;
+  private openButton:     HTMLElement | undefined | null;
+  private closeButton:    HTMLElement | undefined | null;
   private modalContainer: HTMLElement | undefined | null;
-  private modalContent: HTMLElement | undefined | null;
+  private modalContent:   HTMLElement | undefined | null;
+  private modalMessage:   HTMLElement | undefined | null;
+  private openState:      boolean;
 
+  public getCloseButton():   HTMLElement {return this.closeButton as HTMLElement;}
+  public getModalMessage():  HTMLElement {return this.modalMessage as HTMLElement;}
+  public getState():     boolean  {return this.openState;}
+  public setState(state: boolean) { this.openState = state;}
+  
   constructor(modal_id: string, open_id: string) {
+
+    this.openState = false;
     this.modalContainer = document.getElementById(modal_id);
-    this.closeButton = this.modalContainer?.querySelector(
-      '.modal_button_close'
-    );
+    this.closeButton = this.modalContainer?.querySelector('.modal_button_close');
     this.modalContent = this.modalContainer?.querySelector('.modal_content');
+    this.modalMessage = this.modalContainer?.querySelector('.modal_message');
     this.openButton = document.getElementById(open_id);
 
     if (
