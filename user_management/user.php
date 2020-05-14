@@ -96,9 +96,64 @@ class User {
         $this->cur_session_id = session_id();
     }
 
-    public function register($tmp_username, $tmp_email, $tmp_passwd, $tmp_birthdate)
+    /*
+        SUCCESS = true
+        ----ERROR CODES----
+         0: Something went really wrong.
+        -1: There is already a user registered with that username or email
+        -2: The username entered is not valid
+        -3: The email entered is not valid
+        -4: The date entered is not valid
+        -5: The password entered is not valid
+    */
+    public function register($tmp_username, $tmp_email, $tmp_birthdate, $tmp_passwd)
     {
+        //CHECK AND SANITIZE STRINGS
+        //HAPPY REGEX!
+        $result = false;
 
+        if( 
+            $tmp_username     === '' or $tmp_username  == null 
+            or $tmp_email     === '' or $tmp_email     == null 
+            or $tmp_passwd    === '' or $tmp_passwd    == null
+            or $tmp_birthdate === '' or $tmp_birthdate == null)
+        {
+            return 0;
+        }
+        else
+        {
+            $result = preg_match(REGEX_USER, $tmp_username);
+            if($result === false)
+                return -3;
+
+            $result = preg_match(REGEX_EMAIL, $tmp_email);
+            if($result === false)
+                return -4;
+
+            $result = DbManager::validateDate($tmp_birthdate);
+            if(!$result)
+                return -5;
+
+            $result = preg_match(REGEX_PASS, $tmp_passwd);
+            if($result === false)
+                return -6;
+
+            //EVERYTHING SEEMS FINE.. CALL THE DB!
+
+            $arr = array($tmp_username, $tmp_email, $tmp_birthdate, $tmp_passwd);
+            $result = DbManager::query_register($arr);
+            if($result !== true)
+            {
+                if($result === -1)
+                    return -1;
+                else
+                    return 0;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 
     public function tryAutoLogin()
@@ -106,6 +161,11 @@ class User {
 
     }
 
+    /*
+        SUCCESS: true
+        ----ERROR CODES----
+        0: Wrong username or password
+    */
     public function login($usernameemail, $password): bool
     {
         $this->logged = true;

@@ -1,4 +1,10 @@
 <?php
+
+const REGEX_USER   = '/^[a-zA-Z0-9_]+$/';
+const REGEX_EMAIL  = '/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/';
+const REGEX_PASS   = '/^[a-zA-Z0-9!@#%&_-]+$/';
+const REGEX_NAME  = '/^[a-zA-Z]+$/';
+
 final class Costants {
 
     private static $dbServerName  = 'localhost';
@@ -7,6 +13,10 @@ final class Costants {
     private static $dbDriver      = 'mysql';
     private static $dbCharset     = 'utf8mb4';
     private static $dbName        = 'bikesharing';
+
+    private static $usersCache = array();
+
+    public static function getUserCache() { return self::$usersCache; }
 
     private static $instance = null;
 

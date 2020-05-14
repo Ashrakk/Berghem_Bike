@@ -4,16 +4,11 @@ DbManager::get_instance();
 class DbManager
 {
     private static $costants    = null;
-    private static $instance    = null;
-
-    private static $passRegex = '^[a-zA-Z0-9!@#%&_-]+$';
-    private static $userRegex = '^[a-zA-Z0-9_]+$';
-    private static $nameRegex = '^[a-zA-Z]+$';
-    private static $emailRegex = '^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$';
+    private static $pdo         = null;
 
     public static function get_instance() 
     {
-        if ( self::$instance == null ) 
+        if ( self::$pdo == null ) 
         {
             $returnCode = true;
             $costants = Costants::get_instance();
@@ -27,7 +22,7 @@ class DbManager
     
             try 
             {
-                self::$instance = new PDO($dsn, $costants->getDB_user(), $costants->getDB_passwd(), $options);
+                self::$pdo = new PDO($dsn, $costants->getDB_user(), $costants->getDB_passwd(), $options);
             } catch (PDOException $e) {
                 error_log('FATAL ERROR: PDO DB CONNECTION FAILED!!!');
                 error_log($e->getMessage());
@@ -35,16 +30,22 @@ class DbManager
             }
 
         }
-        return self::$instance;
+        return self::$pdo;
+    }
+
+    public static function validateDate($date, $format = 'Y-m-d')
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) === $date;
     }
 
     public static function query_map()
     {
         $index = 1;
 
-        $statement  = self::$instance->query("SELECT * FROM stations");
+        $statement  = self::$pdo->query("SELECT * FROM stations");
         $stations = $statement->fetchAll(PDO::FETCH_ASSOC);
-        $statement  = self::$instance->query("SELECT location FROM bikes WHERE bikes.`status` = 'available'");
+        $statement  = self::$pdo->query("SELECT location FROM bikes WHERE bikes.`status` = 'available'");
         $bikes = $statement->fetchAll(PDO::FETCH_NUM);
 
         $stations_count = count($stations);
@@ -82,9 +83,27 @@ class DbManager
 
     }
 
-    public static function query_register()
+    public static function query_register($data)
     {
-
+        $statement = self::$pdo->prepare("SELECT email, username FROM users WHERE username = ? OR email = ?");
+        $result = $statement->execute([$data[0], $data[1]]);
+        if(!$result)
+            return 0;
+        else
+        {
+            $result = $statement->fetch();
+            if($result !== false)
+                return -1; //there's a user with the same email/username
+            else
+            {
+                //proceed with insert
+                $statement = self::$pdo->prepare("INSERT INTO users (username, email, birthdate, password) VALUES (?, ?, ?, ?);");
+                $result = $statement->execute($data);
+                if (!$result)
+                    return 0;
+            }
+        }
+        return true;
     }
 }
 
