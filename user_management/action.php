@@ -1,12 +1,31 @@
 <?php
+    include_once 'dbmanager.php';
     include_once 'user.php';
-    /* ------- USERS CACHE ------- */
-    $users = Costants::getUserCache();
 
-    if (session_status() != PHP_SESSION_ACTIVE )
+    if(session_status() == PHP_SESSION_NONE)
     {
         session_start();
     }
+
+    /* ------- USERS CACHE ------- */
+    $user = null;
+    if(isset($_SESSION['user_cache']))
+    {
+        $user = unserialize($_SESSION['user_cache']);
+    }
+
+    /*------- SESSION TIMEOUT CHECK -------*/
+    $time = $_SERVER['REQUEST_TIME'];
+    $timeout_duration = 600; //10 minute session timeout
+
+    if (isset($_SESSION['LAST_ACTIVITY']) && 
+    ($time - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+        session_unset();
+        session_destroy();
+        session_start();
+    }
+    //TIME RESETS ON EVERY ACTION
+    $_SESSION['LAST_ACTIVITY'] = $time;
 
     //check for auth cookie in DB
     if(isset($_POST['check_user']))
@@ -14,6 +33,7 @@
 
     }
 
+    /*RETURNS map_data XML*/
     if(isset($_POST['get_map_data']))
     {
         Header('Content-type: text/xml');
@@ -21,118 +41,112 @@
         echo $xml->asXML();
     }
 
-    //get session id
-    //find user with correct session id
-    //delete user from cache
-    //destroy session
-    if(isset($_POST['submit_logout']))
-    {
-        $ses_id = session_id();
-        if(!empty($users))
-        {
-            if (isset($users[$ses_id]))
-            {
-                if(isset($_SESSION['loginStatus']))
-                {
-                    $users[$ses_id]->logout();
-                    unset($users[$ses_id]);
-                    session_destroy();
-                }        
-            }
-        }
-    }
-
     /* ------- REGISTRATION FORM ------- */
     if(isset($_POST['submit_registration']))
     {
         $result     = false;
+        $user       = null;
         $ses_id     = session_id();
         $username   = $_POST['username'];
         $email      = $_POST['email'];
         $birthdate  = $_POST['birth'];
         $password   = $_POST['password'];
 
-        //check if users already exist in cache and that has a loggedStatus cookie..
-        if(!empty($users))
+        //check if users already exist in cache
+
+        if($user != null)
         {
-            if (isset($users[$ses_id]))
+            if($user->getLoginStatus() === true)
             {
-                if(isset($_SESSION['loginStatus']))
+                echo ALREADY_LOGGED_IN;
+                exit();
+            }
+        }      
+        else
+        {
+            if( !empty($username)   and 
+                !empty($email)      and
+                !empty($birthdate)  and
+                !empty($password))
+            {
+                //allocate new user with current session id as key 
+                $user = new User();
+
+                $result = $user->register($username, $email, $birthdate, $password);
+
+                if($result === SUCCESS) // LOGIN SUCCESSFUL
                 {
-                    //user is already logged in. tell him.
-                    echo 'User already logged in';
-                    exit();
-                }        
-            }
-        }
-        if( !empty($username)   and 
-            !empty($email)      and
-            !empty($birthdate)  and
-            !empty($password))
-        {
-            //allocate new user with current session id as key 
-            $users[$ses_id] = new User();
+                    session_regenerate_id(true);
+                    $user->setSessionID(session_id());
+                    $_SESSION['user_cache'] = serialize($user);
+                }
+                else // ERROR CODE
+                {
+                    unset($user);
+                }
 
-            $result = $users[$ses_id]->register($username, $email, $birthdate, $password);
-
-            if($result === true) // LOGIN SUCCESSFUL
-            {
-                session_regenerate_id(true);
-                $users[session_id()] = $users[$ses_id];
-                $users[session_id()]->setSessionID(session_id());
-                unset($users[$ses_id]);
+                echo $result;
             }
-            else // ERROR CODE
-            {
-                unset($users[$ses_id]);
-            }
-
-            echo $result;
         }
     }
 
     /* ------- LOGIN FORM ------- */
     if(isset($_POST['submit_login']))
     {
-        $result = false;
-        $ses_id = session_id();
-        $emailusername = $_POST['emailusername'];
-        $password = $_POST['password'];
+        $result     = false;
+        $user       = null;
+        $ses_id     = session_id();
+        $emailusername  = $_POST['emailusername'];
+        $password       = $_POST['password'];
 
-        //check if users already exist in cache and that has a loggedStatus cookie..
-        if(!empty($users))
+        //check if users already exist in cache
+        if($user != null)
         {
-            if (isset($users[$ses_id]))
+            if($user->getLoginStatus() === true)
             {
-                if(isset($_SESSION['loginStatus']))
-                {
-                    //user is already logged in. tell him.
-                    echo 'User already logged in';
-                    exit();
-                }        
+                echo ALREADY_LOGGED_IN;
+                exit();
             }
         }
-        if( !empty($emailusername) and 
-            !empty($password))
+        else
         {
-            //allocate new user with current session id as key 
-            $users[$ses_id] = new User();
-
-            $result = $users[$ses_id]->login($emailusername, $password);
-
-            if($result === true) // LOGIN SUCCESSFUL
+            if( !empty($emailusername) and 
+            !empty($password))
             {
-                session_regenerate_id(true);
-                $users[session_id()] = $users[$ses_id];
-                $users[session_id()]->setSessionID(session_id());
-                unset($users[$ses_id]);
-            }
-            else // ERROR CODE
-            {
-                unset($users[$ses_id]);
-            }
+                //allocate new user with current session id as key 
+                $user = new User();
 
-            echo $result;
+                $result = $user->login($emailusername, $password);
+
+                if($result == SUCCESS) // LOGIN SUCCESSFUL
+                {
+                    session_regenerate_id(true);
+                    $user->setSessionID(session_id());
+                    $_SESSION['user_cache'] = serialize($user);
+                }
+                else // ERROR
+                {
+                    unset($user);
+                }
+
+                echo $result;
+            }
+        }       
+    }
+
+    /* ------- LOGOUT ------- */
+    if(isset($_POST['submit_logout']))
+    {
+        if($user != null)
+        {
+            if($user->getLoginStatus() === true)
+            {
+                $user->logout();
+                unset($user);
+                session_unset();
+                session_destroy();
+                exit();
+            }
         }
     }
 ?>

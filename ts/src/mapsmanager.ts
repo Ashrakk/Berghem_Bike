@@ -83,10 +83,10 @@ export class MapsManager {
       ).addTo(this.map);
     }
 
-    this.reload(false);
+    this.reload();
   }
 
-  public reload(adv: boolean)
+  public reload()
   {
     this.ajaxman.ajax_getMapMarkers((xmlRequest: XMLHttpRequest) => 
     {
@@ -116,7 +116,7 @@ export class MapsManager {
           name      = stations?.item(index)?.getElementsByTagName('name').item(0)?.innerHTML;
           addr      = stations?.item(index)?.getElementsByTagName('addr').item(0)?.innerHTML;
 
-          popup   = new L.Popup().setContent(`${name}<br>${addr}<br>Slot: ${available}/${slots}`);
+          popup   = new L.Popup().setContent(`Stazione: ${name}<br>${addr}<br>Slot: ${available}/${slots}`);
           
           if(available < (slots * (1/3) ))
           {

@@ -20,7 +20,10 @@ export class Notification
         this.msgBox           = document.getElementById('messageBox');
     }
 
- 
+ /**
+  * Display timed desktop mode notification
+  * @param str 
+  */
     public showMessageBox( str: string )
     {
       let tmpTimer;
@@ -64,6 +67,9 @@ export class Notification
       }
     }
 
+    /**
+     * Clears the desktop mode notification 
+     */
     public clearMsgBox()
     {
       if(this.msgBox != undefined)
@@ -77,8 +83,12 @@ export class Notification
     }
 
 
-    //color = 0: red
-    //color = 0: green
+    /**
+     * Display notification on current modal 
+     * @param str message
+     * @param color Valid inputs: false (red) OR true (green)  
+     * @param closemodal true to set timer to close modal
+     */
     public showCurModalMsgField( str: string, color: boolean, closemodal: boolean) 
     {
       let state = false;
@@ -133,6 +143,9 @@ export class Notification
       }
     }
   
+    /**
+     * Clear current modal notification
+     */
     public clearCurModalMsgField()
     {
       let modal = this.getOpenModal();
@@ -145,6 +158,9 @@ export class Notification
       }
     }
 
+    /**
+     * Closes current modal
+     */
     public closeCurrentModal()
     {
       let modal = this.getOpenModal();
@@ -152,6 +168,9 @@ export class Notification
         modal.getCloseButton().click();
     }
 
+    /**
+     * Gets open modal
+     */
     public getOpenModal(): Modal | undefined
     {
       let state = false;
@@ -165,7 +184,8 @@ export class Notification
     }
 
     /**
-     * 
+     * Clears all the timers (set to close modals or notifications)
+     * Used when manually cleaning notifications
      * @param str valid values: 'modal' or 'box'
      */
     public clearTimers(str: String)

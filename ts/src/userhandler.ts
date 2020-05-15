@@ -1,10 +1,14 @@
 import { AjaxManager }          from './ajaxmanager.js';
 import { ResponsiveManager }    from './responsive.js';
 import { Modal }                from './modal.js';
-import { Notification }           from './notifications.js';
+import { Notification }         from './notifications.js';
+import { Constants }            from './constants.js';
+
+
 
 export class UserHandler
 {
+    private constants:          Constants;
     private ajaxman:            AjaxManager | undefined;
     private responsive:         ResponsiveManager | undefined;
     private notify:             Notification | undefined;
@@ -20,16 +24,11 @@ export class UserHandler
     private regEmail:           HTMLInputElement | undefined | null;
     private regBirth:           HTMLInputElement | undefined | null;
     private regPassword:        HTMLInputElement | undefined | null;
-    private regPasswordConfirm: HTMLInputElement | undefined | null;
-  
-    private passRegex = new RegExp('^[a-zA-Z0-9!@#%&_-]+$');
-    private userRegex = new RegExp('^[a-zA-Z0-9_]+$');
-    private nameRegex = new RegExp('^[a-zA-Z]+$');
-    private emailRegex = new RegExp('^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$');
-  
+    private regPasswordConfirm: HTMLInputElement | undefined | null;  
 
     constructor(tmpResponsive: ResponsiveManager, tmpNotify: Notification, tmpModals: Modal[])
     {
+        this.constants  = new Constants();
         this.responsive = tmpResponsive;
         this.notify     = tmpNotify;
         this.modals     = tmpModals;
@@ -64,10 +63,10 @@ export class UserHandler
             return;
           }
             
-          result = this.emailRegex.test(str_emailuser);
+          result = Constants.REGEX_EMAIL.test(str_emailuser);
           if(result == false)
           {
-              result = this.userRegex.test(str_emailuser);
+              result = Constants.REGEX_USER.test(str_emailuser);
               if(result == false)
               {
                 this.notify?.showCurModalMsgField('Il campo \"Nome utente / Email\" non è valido o contiene caratteri non ammessi', false, false);
@@ -75,7 +74,7 @@ export class UserHandler
               }
           }
             
-          result = this.passRegex.test(str_password);
+          result = Constants.REGEX_PASS.test(str_password);
           if(result == false)
           {
               this.notify?.showCurModalMsgField('Il campo \"Password\" contiene caratteri non ammessi', false, false);
@@ -86,14 +85,30 @@ export class UserHandler
           this.ajaxman?.ajax_submit_login( str_emailuser, str_password,
               (xmlRequest: XMLHttpRequest) => 
               {
-              //SAVE LOGGED IN STATUS
-              sessionStorage.setItem('logged', 'true');
-              this.responsive?.switchMenuType(true);
-              
-              if(this.responsive?.isMobileModeActive() == true)
-                this.notify?.showCurModalMsgField('Login eseguito con successo', true, true);
-              else
-                this.notify?.showMessageBox('Login eseguito con successo');
+                let result = xmlRequest.responseText;
+                if(result == Constants.SUCCESS)
+                {
+                  //SAVE LOGGED IN STATUS
+                  sessionStorage.setItem('logged', 'true');
+                  this.responsive?.switchMenuType(true);
+                  
+                  if(this.responsive?.isMobileModeActive() == true)
+                    this.notify?.showCurModalMsgField('Login eseguito con successo', true, true);
+                  else
+                    this.notify?.showMessageBox('Login eseguito con successo');
+                }
+                else
+                {
+                  switch(result)
+                  {
+                    case Constants.WRONG_EMAIL_OR_PASS: //Email o password errati
+                      this.notify?.showCurModalMsgField('Email o password errati', false, false);
+                      break;
+                    default:                            //Something went really wrong.
+                      this.notify?.showCurModalMsgField('Qualcosa è andato storto.', false, false);
+                      break;
+                  }
+                }
               });
         }
     }
@@ -161,21 +176,21 @@ export class UserHandler
       }
 
       //REGEX CHECK USERNAME FIELD
-      result = this.userRegex.test(str_username);
+      result = Constants.REGEX_USER.test(str_username);
       if(result == false)
       {
         this.notify?.showCurModalMsgField('Il campo \"Nome utente\" contiene caratteri non ammessi', false, false);
         return;
       }
       //REGEX CHECK EMAIL FIELD
-      result = this.emailRegex.test(str_email);
+      result = Constants.REGEX_EMAIL.test(str_email);
       if(result == false)
       {
         this.notify?.showCurModalMsgField('Il campo \"Email\" non è valido o contiene caratteri non ammessi', false, false);
         return;
       }
       //REGEX CHECK PASSWORD FIELD
-      result = this.passRegex.test(str_password);
+      result = Constants.REGEX_PASS.test(str_password);
       if(result == false)
       {
         this.notify?.showCurModalMsgField('Il campo \"Password\" contiene caratteri non ammessi', false, false);
@@ -200,7 +215,7 @@ export class UserHandler
 
       if (str_password.match('[!@#%&_-]') == null)
       {
-        this.notify?.showCurModalMsgField('La password deve contenere almeno un carattere speciale: ( ! @ # % & _ - ).', false, false);
+        this.notify?.showCurModalMsgField('La password deve contenere almeno un carattere speciale: ( ~ ! @ # $ % ^ & * _ - ).', false, false);
         return;    
       }
 
@@ -220,7 +235,7 @@ export class UserHandler
         (xmlRequest: XMLHttpRequest) => 
         {
           let result = xmlRequest.responseText;
-          if(result == 'true')
+          if(result == Constants.SUCCESS)
           {
             //SAVE LOGGED IN STATUS
             sessionStorage.setItem('logged', 'true');
@@ -233,7 +248,30 @@ export class UserHandler
           }
           else
           {
-            this.notify?.showCurModalMsgField('Qualcosa è andato storto', false, false);
+            switch(result)
+            {
+              case Constants.USER_ALREADY_EXISTS:   //There is already a user registered with that username or email
+                this.notify?.showCurModalMsgField('Esiste già un utente con quel<br>nome utente o email', false, false);
+                break;
+              case Constants.INVALID_USERNAME:      //The username entered is not valid
+                this.notify?.showCurModalMsgField('Il nome utente inserito non è valido', false, false);
+                break;
+              case Constants.INVALID_EMAIL:         //The email entered is not valid
+                this.notify?.showCurModalMsgField('L\'email inserita non è valida', false, false);
+                break;
+              case Constants.INVALID_DATE:          //The date entered is not valid
+                this.notify?.showCurModalMsgField('La data inserita non è valida', false, false);
+                break;
+              case Constants.INVALID_PASSWORD:      //The password entered is not valid
+                this.notify?.showCurModalMsgField('La password inserita non è valida', false, false);
+                break; 
+              case Constants.LENGHT_LIMIT:      //The password entered is not valid
+                this.notify?.showCurModalMsgField('Un campo ha superato il limite di 64 caratteri<br>limite email: 254 caratteri<br>limite password: 72 caratteri', false, false);
+                break; 
+              default:                              //Something went really wrong.
+                this.notify?.showCurModalMsgField('Qualcosa è andato storto.', false, false);
+                break;
+              }
           }
         });
     }

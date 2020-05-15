@@ -160,7 +160,7 @@ ul
   display: none !important;
 }
 
-.textbold
+.text_bold
 {
   font-family: "texgyreadventorbold", sans-serif !important;
 }
@@ -296,6 +296,22 @@ ul
 
 /*SPECIFIC STUFF*/
 
+.separator
+{
+  border-bottom: 1px solid #aaa;
+  margin: auto;
+  padding: 0.2em 1em;
+      padding-bottom: 0.2em;
+  padding-bottom: 0.1em;
+}
+
+.boxshadow
+{
+  box-shadow: rgba(0,0,0,0.2) 0 0em 1em 0, inset rgba(0,0,0,0.2) 0 0em 0.3em 0;
+  padding: 1em 1em;
+  border-radius: 1em;
+}
+
 #messageBox
 {
   width: 100%;
@@ -383,14 +399,14 @@ ul
   width: 95vw;
   display: flex;
   flex-direction: column;
-  margin: 0px 2vw;
+  margin: 0px 1em;
   text-align: left;
 }
 
 /*BARRA NAVIGAZIONE FIXED TOP*/
 .div_navbar
 {
-  z-index: 5;
+  z-index: 2000;
   width: 100%;
   display: flex;
   flex-direction: row;  
@@ -480,11 +496,11 @@ ul
 
 .modal_overlay
 {
+  z-index: 3000;
   display: block;
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 10;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -499,7 +515,6 @@ ul
 
 .modal_content
 {
-  z-index: 15;
   position: relative;
   top: 25%;
   margin: auto;

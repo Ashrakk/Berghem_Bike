@@ -1,8 +1,8 @@
 export class TouchSwipe {
-  element: any;
-  swipeLenght: number;
-  xDown: number;
-  yDown: number;
+  private element: any;
+  private swipeLenght: number;
+  private xDown: number;
+  private yDown: number;
 
   private status = false;
 
@@ -22,23 +22,23 @@ export class TouchSwipe {
     }
   }
 
-  onLeft(callback?: () => void): void {
+  public onLeft(callback?: () => void): void {
     if (callback != undefined) this.onLeft = callback;
   }
 
-  onRight(callback?: () => void): void {
+  public onRight(callback?: () => void): void {
     if (callback != undefined) this.onRight = callback;
   }
 
-  onUp(callback?: () => void): void {
+  public onUp(callback?: () => void): void {
     if (callback != undefined) this.onUp = callback;
   }
 
-  onDown(callback?: () => void): void {
+  public onDown(callback?: () => void): void {
     if (callback != undefined) this.onDown = callback;
   }
 
-  handleTouchMove(evt: TouchEvent) {
+  private handleTouchMove(evt: TouchEvent) {
     if (!this.xDown || !this.yDown) {
       return;
     }
@@ -66,7 +66,7 @@ export class TouchSwipe {
     this.yDown = 0;
   }
 
-  start() {
+  public start() {
     if (!this.status) {
       this.status = true;
       this.element.addEventListener('touchmove', (evt: TouchEvent) => {
@@ -75,7 +75,7 @@ export class TouchSwipe {
     }
   }
 
-  stop() {
+  public stop() {
     if (this.status) {
       this.status = false;
       this.element.addRemoveListener('touchmove', (evt: TouchEvent) => {

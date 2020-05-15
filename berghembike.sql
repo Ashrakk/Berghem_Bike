@@ -170,20 +170,22 @@ INSERT INTO `stations` (`IDStation`, `lat`, `lon`, `slots`, `stationName`, `stat
 -- Dumping structure for table bikesharing.users
 CREATE TABLE IF NOT EXISTS `users` (
   `IDUser` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(60) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
   `password` varchar(255) NOT NULL DEFAULT '',
-  `username` varchar(60) NOT NULL DEFAULT '',
-  `name` varchar(60) NOT NULL DEFAULT '',
-  `surname` varchar(60) NOT NULL DEFAULT '',
+  `username` varchar(64) NOT NULL DEFAULT '',
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `surname` varchar(64) NOT NULL DEFAULT '',
   `address` varchar(255) NOT NULL DEFAULT '',
   `birthdate` varchar(50) NOT NULL DEFAULT '',
   `privilege` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `verified` tinyint(1) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`IDUser`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table bikesharing.users: ~1 rows (approximately)
+-- Dumping data for table bikesharing.users: ~0 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` (`IDUser`, `email`, `password`, `username`, `name`, `surname`, `address`, `birthdate`, `privilege`, `verified`) VALUES
+	(28, 'davidevertigocuni@gmail.com', '$2y$10$SNite45RiIhU.1mBVWfcs.lURyuDmV/5NTjuN8E/5dM/ob5KCs43O', 'admin', '', '', '', '2001-10-31', 0, 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

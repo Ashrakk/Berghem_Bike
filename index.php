@@ -1,5 +1,5 @@
 <?php
-  include_once 'common.php';
+  include 'common.php';
 ?>
 <!DOCTYPE HTML>
 <html>

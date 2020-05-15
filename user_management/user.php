@@ -3,56 +3,56 @@ include_once 'dbmanager.php';
 
 class User {	
     private $logged;
-    private $cur_session_id;
+    private $cur_session_id = null;
 
-    private $email;
-    private $passwd;
-    private $username;
-    private $name;
-    private $surname;
-    private $address;
-    private $birth;
-    private $privilege;
-    private $rememberToken;
-    private $verified;
+    private $email      = null;
+    private $passwd     = null;
+    private $username   = null;
+    private $name       = null;
+    private $surname    = null;
+    private $address    = null;
+    private $birth      = null;
+    private $privilege  = null;
+    private $rememberToken  = null;
+    private $verified   = null;
 
     //-------GET-------//
 
     public function getSessionId()
-    { if (isset($cur_session_id)) { return $this->cur_session_id; } else return null; }
+    { if (isset($this->cur_session_id)) { return $this->cur_session_id; } else return null; }
 
     public function getLoginStatus()
-    { if (isset($logged)) { return $this->logged; } else return null; }
+    { if (isset($this->logged)) { return $this->logged; } else return null; }
 
     public function getEmail()
-    { if (isset($email)) { return $this->email; } else return null; }
+    { if (isset($this->email)) { return $this->email; } else return null; }
 
     public function getPassword()
-    { if (isset($passwd)) { return $this->passwd; } else return null;  }
+    { if (isset($this->passwd)) { return $this->passwd; } else return null;  }
 
     public function getUsername()
-    { if (isset($username)) { return $this->username; } else return null;  }
+    { if (isset($this->username)) { return $this->username; } else return null;  }
 
     public function getName()
-    { if (isset($name)) { return $this->name; } else return null;  }
+    { if (isset($this->name)) { return $this->name; } else return null;  }
 
     public function getSurname()
-    { if (isset($surname)) { return $this->surname; } else return null; }
+    { if (isset($this->surname)) { return $this->surname; } else return null; }
 
     public function getAddress()
-    { if (isset($address)) { return $this->address; } else return null; }
+    { if (isset($this->address)) { return $this->address; } else return null; }
 
     public function getBirth()
-    { if (isset($birth)) { return $this->birth; } else return null; }
+    { if (isset($this->birth)) { return $this->birth; } else return null; }
 
     public function getPrivilege()
-    { if (isset($privilege)) { return $this->privilege; } else return null; }
+    { if (isset($this->privilege)) { return $this->privilege; } else return null; }
 
     public function getRememberToken()
-    { if (isset($rememberToken)) { return $this->rememberToken; } else return null; }
+    { if (isset($this->rememberToken)) { return $this->rememberToken; } else return null; }
 
     public function isVerified()
-    { if (isset($verified)) { return $this->verified; } else return null; }
+    { if (isset($this->verified)) { return $this->verified; } else return null; }
 
     //-------SET-------//
 
@@ -89,6 +89,10 @@ class User {
     public function setVerified($val)
     { $this->verified = $val; }
 
+    private function setLoginStatus($val)
+    { $this->logged = $val; }
+
+
     
     public function __construct()
     {
@@ -105,8 +109,9 @@ class User {
         -3: The email entered is not valid
         -4: The date entered is not valid
         -5: The password entered is not valid
+        -10: User already logged in
     */
-    public function register($tmp_username, $tmp_email, $tmp_birthdate, $tmp_passwd)
+    public function register($tmp_username, $tmp_email, $tmp_birthdate, $tmp_passwd): int
     {
         //CHECK AND SANITIZE STRINGS
         //HAPPY REGEX!
@@ -118,41 +123,55 @@ class User {
             or $tmp_passwd    === '' or $tmp_passwd    == null
             or $tmp_birthdate === '' or $tmp_birthdate == null)
         {
-            return 0;
+            return GENERAL_ERROR;
         }
         else
         {
             $result = preg_match(REGEX_USER, $tmp_username);
-            if($result === false)
-                return -3;
+            if(!$result)
+                return INVALID_USERNAME;
+
+            if(strlen($tmp_username) >= LENGHT_LIMIT_DEFAULT)
+                return LENGHT_LIMIT;
 
             $result = preg_match(REGEX_EMAIL, $tmp_email);
-            if($result === false)
-                return -4;
+            if(!$result)
+                return INVALID_EMAIL;
+            
+            if(strlen($tmp_email) >= LENGHT_LIMIT_EMAIL)
+                return LENGHT_LIMIT;
 
             $result = DbManager::validateDate($tmp_birthdate);
             if(!$result)
-                return -5;
+                return INVALID_DATE;
+
+            if(strlen($tmp_birthdate) >= LENGHT_LIMIT_DEFAULT)
+                return LENGHT_LIMIT;
 
             $result = preg_match(REGEX_PASS, $tmp_passwd);
-            if($result === false)
-                return -6;
+            if(!$result)
+                return INVALID_PASSWORD;
+
+            if(strlen($tmp_passwd) >= LENGHT_LIMIT_PASS)
+                return LENGHT_LIMIT;
 
             //EVERYTHING SEEMS FINE.. CALL THE DB!
 
-            $arr = array($tmp_username, $tmp_email, $tmp_birthdate, $tmp_passwd);
-            $result = DbManager::query_register($arr);
-            if($result !== true)
+            /*HASHING*/
+            //
+            $finalpass = password_hash( base64_encode( hash( 'sha256', $tmp_passwd, true ) ), PASSWORD_DEFAULT);
+
+            $this->setUsername($tmp_username);
+            $this->setEmail($tmp_email);
+            $this->setBirth($tmp_birthdate);
+            $this->setPassword($finalpass);
+
+            $result = DbManager::query_register($this);
+            if($result === SUCCESS)
             {
-                if($result === -1)
-                    return -1;
-                else
-                    return 0;
+                $this->setLoginStatus(true);       
             }
-            else
-            {
-                return true;
-            }
+            return $result;
         }
     }
 
@@ -166,20 +185,64 @@ class User {
         ----ERROR CODES----
         0: Wrong username or password
     */
-    public function login($usernameemail, $password): bool
+    public function login($tmp_username_email, $tmp_passwd): int
     {
-        $this->logged = true;
-        $_SESSION['loggedStatus'] = true;
+        //CHECK AND SANITIZE STRINGS
+        $result = false;
+        $kind   = false;    //false = email, true = username
 
-        return true;
+        if( 
+            $tmp_username_email     === '' or $tmp_username_email  == null  
+            or $tmp_passwd    === '' or $tmp_passwd    == null)
+        {
+            return GENERAL_ERROR;
+        }
+        else
+        {
+            $result = preg_match(REGEX_EMAIL, $tmp_username_email);
+            if(!$result)
+            {
+                $result = preg_match(REGEX_USER, $tmp_username_email);
+                if(!$result)
+                    return WRONG_EMAIL_OR_PASS;
+                $kind = true;
+            }
+
+            if($kind)   //if username
+            {
+                if(strlen($tmp_username_email) >= LENGHT_LIMIT_DEFAULT)
+                    return LENGHT_LIMIT;
+                $this->setUsername($tmp_username_email);
+            }
+            else        //if email
+            {
+                if(strlen($tmp_username_email) >= LENGHT_LIMIT_EMAIL)
+                    return LENGHT_LIMIT;
+                $this->setEmail($tmp_username_email);
+            }
+
+            $result = preg_match(REGEX_PASS, $tmp_passwd);
+            if(!$result)
+                return WRONG_EMAIL_OR_PASS;
+
+            if(strlen($tmp_passwd) >= LENGHT_LIMIT_PASS)
+                return LENGHT_LIMIT;
+
+            //EVERYTHING SEEMS FINE.. CALL THE DB!
+            $this->setPassword($tmp_passwd);
+
+            $result = DbManager::query_login($this, $kind);
+            if($result === SUCCESS)
+            {
+                $this->setLoginStatus(true);       
+            }
+            return $result;
+        }
     }
     
-    public function logout(): bool
+    public function logout()
     {
         $this->logged = false;
-        $_SESSION['loggedStatus'] = false;
-
-        return true;
     }
 
     public function forgotpass()
