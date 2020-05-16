@@ -1,9 +1,7 @@
 <?php
   include 'common.php';
-  $logged = false;
 ?>
-
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
   <head>
     <meta charset="utf-8">
@@ -15,14 +13,39 @@
           minimum-scale = 0.75,
           maximum-scale = 10.0">
 
-    <script src="./ts/build/src/uimanager.js" type="module"></script>
-    <script src="./ts/build/src/modal.js" type="module"></script>
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+  
+    <link rel="stylesheet" type="text/css" href="./css/leaflet.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src = "./ts/build/src/app.min.js" type="module"></script>  
+    <script src = "./ts/build/src/uimanager.js" type="module"></script> 
+    <script src = "./ts/build/src/modal.js" type="module"></script> 
+    <!--
+    -->
+    <script>
+      var uimanager;
+    </script>
 
     <script type="module">
-
       // IMPORTO LE CLASSI NECESSARIE
+      import { MapsManager } from './ts/build/src/app.min.js';
       import { UIManager } from './ts/build/src/uimanager.js';
       import { Modal } from './ts/build/src/modal.js';
 
@@ -30,13 +53,28 @@
 
       function initialize()
       {
-        let modal_login = new Modal('modal_container_login', 'id-butt-login');
-        let modal_register = new Modal('modal_container_register', 'id-butt-register');
-        let modal_register_now = new Modal('modal_container_register', 'id-specialbutton');
+        let modal_login         = new Modal('modal_container_login', 'id-butt-login');
+        let modal_register      = new Modal('modal_container_register', 'id-butt-register');
+        let buttLogin   = document.getElementById('butt_submit_login');
+        let buttReg     = document.getElementById('butt_submit_reg');
+        let buttLogout  = document.getElementById('butt_submit_logout');
 
-        let uimanager = new UIManager(modal_login, modal_register, modal_register_now);
+        uimanager = new UIManager(modal_login, modal_register);
+
+        buttLogin.addEventListener('click', () => {
+          uimanager.submit_login();
+        });
+
+        buttReg.addEventListener('click', () => {
+          uimanager.submit_reg();
+        });
+
+        buttLogout.addEventListener('click', () => {
+          uimanager.submit_logout();
+        });
+
+        let mapsman = new MapsManager();
       }
-
     </script>
 
   </head>
@@ -45,22 +83,22 @@
     <div class="modal_overlay hidden" id="modal_container_login">
       <div class="modal_content">
         <header class="modal_container">
-          <span onclick=""
-           class="modal_button_close">×</span>
+          <span class="modal_button_close">×</span>
           <h2>Accedi</h2>
         </header>
-          <form class= "form_style" action="user_managment/login.php" method="POST" id="login_form">
+          <form class= "form_style" action="./user_management/action.php" method="post" id="login_form">
             <div>
-              Username
+              Nome utente / Email
             </div>
-            <input type="text" name="username">
+            <input type="text" name="emailusername">
             <div>
               Password
             </div>
             <input type="password" name="password">
+            <div class="modal_message"></div>
           </form>
           <footer class="modal_container">
-            <button type="submit" form="login_form" class = "form_style_submit">Login</button>
+            <button type="submit" id="butt_submit_login" class="form_style_submit">Login</button>
           </footer>
       </div>
     </div>
@@ -69,11 +107,10 @@
     <div class="modal_overlay hidden" id="modal_container_register">
       <div class="modal_content">
         <header class="modal_container">
-          <span onclick=""
-           class="modal_button_close">×</span>
+          <span class="modal_button_close">×</span>
           <h2>Nuovo Account</h2>
         </header>
-          <form class= "form_style" action="user_managment/login.php" method="POST" id="login_form">
+          <form class= "form_style" action="./user_management/action.php" method="POST" id="reg_form">
             <div>
               Nome utente
             </div>
@@ -94,17 +131,18 @@
             <div>
               Conferma password
             </div>
-            <input type="password" name="password">
+            <input type="password" name="passwordConfirm">
+            <div class="modal_message"></div>
           </form>
           <footer class="modal_container">
-            <button type="submit" form="login_form" class = "form_style_submit">Login</button>
+            <button type="submit" id="butt_submit_reg" class="form_style_submit">Invia</button>
           </footer>
       </div>
     </div>
 
     <!-- CARICAMENTO -->
     <div class="background fullheight" id ="id-page-loader">
-      <img class="loader" src="images/common/loading-1-dark.gif" >
+      <img class="loader" src="images/common/load1.gif" >
     </div>
     
     <!-- CONTENITORE PRINCIPALE FLEX ROW | | | -->

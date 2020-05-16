@@ -27,10 +27,18 @@
     //TIME RESETS ON EVERY ACTION
     $_SESSION['LAST_ACTIVITY'] = $time;
 
-    //check for auth cookie in DB
+    //is the user still logged in?
     if(isset($_POST['check_user']))
     {
-
+        if($user != null)
+        {
+            if($user->getLoginStatus() === true)
+            {
+                echo ALREADY_LOGGED_IN;
+                exit();
+            }
+        }
+        return false;
     }
 
     /*RETURNS map_data XML*/

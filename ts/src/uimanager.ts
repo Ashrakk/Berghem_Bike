@@ -15,16 +15,10 @@ export class UIManager {
 
   constructor(...allmodals: Modal[]) 
   {
-    let logged    = false as boolean;
-    let tmp = sessionStorage.getItem('logged');
-    if(tmp == 'true')
-      logged = true;
-    else
-      logged = false;
-
-    this.responsive = new ResponsiveManager(800, logged);
+    this.responsive = new ResponsiveManager(800, false);
     this.notify = new Notification(allmodals, this.responsive.getContentContainer());
     this.userhandler = new UserHandler(this.responsive, this.notify, this.modals);
+    this.userhandler.check_user()
 
     this.pageContainer = this.responsive.getPageContainer();
     this.modals = this.notify.getModals();

@@ -46,6 +46,25 @@ export class UserHandler
         this.regPassword      = this.regForm?.querySelector('input[name=\'password\']')           as HTMLInputElement | null;
         this.regPasswordConfirm = this.regForm?.querySelector('input[name=\'passwordConfirm\']')  as HTMLInputElement | null;
     }
+
+    public check_user()
+    {
+      this.ajaxman?.ajax_check_user_login_cookie(
+        (xmlRequest: XMLHttpRequest) => 
+        {
+          let result = xmlRequest.responseText;
+          if(result != Constants.ALREADY_LOGGED_IN) //logged in
+          {
+            this.responsive?.switchMenuType(true);
+            sessionStorage.setItem('logged', 'true');
+          }
+          else
+          {
+            this.responsive?.switchMenuType(false);
+            sessionStorage.setItem('logged', 'false');
+          }
+        });
+    }
   
     public submit_login()
     {

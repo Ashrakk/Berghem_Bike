@@ -326,7 +326,10 @@ export class ResponsiveManager {
     this.menuStatus = !this.menuStatus; //TOGGLE
   }
 
-  //logged in view / default view
+  /**
+   * Changes the menu based on the user logged in status
+   * @param menu_type IF = true: Logged in view IF = false: Default view
+   */
   public switchMenuType(menu_type: boolean)
   {
     if(menu_type == true) //LOGGED IN VIEW
