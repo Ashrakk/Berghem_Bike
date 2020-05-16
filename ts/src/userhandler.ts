@@ -53,14 +53,16 @@ export class UserHandler
         (xmlRequest: XMLHttpRequest) => 
         {
           let result = xmlRequest.responseText;
-          if(result != Constants.ALREADY_LOGGED_IN) //logged in
+          if(result === Constants.ALREADY_LOGGED_IN) //logged in
           {
-            this.responsive?.switchMenuType(true);
+            if(this.responsive?.getCurrentMenuType() !== true)
+              this.responsive?.switchMenuType(true);
             sessionStorage.setItem('logged', 'true');
           }
           else
           {
-            this.responsive?.switchMenuType(false);
+            if(this.responsive?.getCurrentMenuType() !== false)
+              this.responsive?.switchMenuType(false);
             sessionStorage.setItem('logged', 'false');
           }
         });
@@ -105,7 +107,7 @@ export class UserHandler
               (xmlRequest: XMLHttpRequest) => 
               {
                 let result = xmlRequest.responseText;
-                if(result == Constants.SUCCESS)
+                if(result === Constants.SUCCESS)
                 {
                   //SAVE LOGGED IN STATUS
                   sessionStorage.setItem('logged', 'true');
@@ -254,7 +256,7 @@ export class UserHandler
         (xmlRequest: XMLHttpRequest) => 
         {
           let result = xmlRequest.responseText;
-          if(result == Constants.SUCCESS)
+          if(result === Constants.SUCCESS)
           {
             //SAVE LOGGED IN STATUS
             sessionStorage.setItem('logged', 'true');

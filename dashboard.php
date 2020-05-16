@@ -72,8 +72,6 @@
         buttLogout.addEventListener('click', () => {
           uimanager.submit_logout();
         });
-
-        let mapsman = new MapsManager();
       }
     </script>
 
@@ -172,147 +170,19 @@
         </div>
       </div>
 
-      <div id="messageBox" class="hidden"></div>
-
       <!--CONTENITORE CENTRALE FLEX COLUMN -->
       <div id="id-main-content-container" class="div_center">
-
-          <!-- IMMAGINE HOME -->
-          <div class="bikelogohomebig"></div> 
-
-          <!-- TITOLO HEADER -->
-          <div class="div_internal_row">
-            <div class="div_internal_column text_center">
-              <h1>
-                STANCO DI CAMMINARE? INIZIA A PEDALARE!
-              </h1>
-              <h3>
-                  Offriamo un servizio di Bike Sharing a basso costo disponibile 24/7.
-              </h3>
-              <div class="spacer4em"></div>
-              <h2>
-                I VANTAGGI DEL BIKE SHARING
-              </h2>
-            </div>
+        <div class="div_internal_row">
+          <div class="div_internal_column text_center">
+            <div class="spacer30"></div>
+            <h1 >Work in progress</h1>
+            <div class="spacer30"></div>
           </div>
-          <!-- I VANTAGGI DEL BIKE SHARING 3 COLONNE -->
-          <div class="div_internal_row">
-            <div class="div_internal_column column_width_1e4 boxshadow">
-              <img src = "images/common/health.png" class = "icon">
-              <h3 class="text_center">
-              SOSTENIBILE E SALUTARE
-              </h3>
-              <p class="margin0">
-              Ridurre la tua impronta sull’ambiente può sembrare insignificante, ma è vitale per un futuro più prospero, l'unione fa la forza!
-              </p>
-            </div>
-            <div class="div_internal_column  column_width_1e4 boxshadow">
-              <img src = "images/common/bicycle.png" class = "icon">
-              <h3 class="text_center">
-              UNA SOLUZIONE EFFICENTE
-              </h3>
-              <p class="margin0">
-              Pensato per viaggi di prossimità dove i mezzi pubblici non possono arrivare.
-              </p>
-            </div>
-            <div class="div_internal_column column_width_1e4 boxshadow">
-            <img src = "images/common/helmet.svg" class = "icon">
-              <h3 class="text_center">
-              MENO INCIDENTI
-              </h3>
-              <p class="margin0">
-              Diversi studi affermano che con un maggiore traffico di biciclette si riduce la probabilità di incidenti
-              </p>
-            </div>
-          </div>
-          <!-- COME FUNZIONA -->
-          <div class="spacer4em"></div>
-          <div class="div_internal_row">
-            <div class="div_internal_column flexColumn text_center"> 
-              <h2>
-                COME FUNZIONA?
-              </h2>
-              <div class="separator textbig_1">
-                Registrati sul sito
-              </div>
-              <div class="separator textbig_1">
-                Scegli un abbonamento <br> 
-                oppure usufruisci della tariffa oraria
-              </div>
-              <div class="separator textbig_1">
-                Aggiungi un metodo di pagamento preferito
-              </div>  
-            </div>
-          </div>
-          <div class="spacer4em"></div>
-          <div class="div_internal_row">
-            <div class="div_internal_column flexColumn text_center"> 
-              <h2>
-                TARIFFE E ABBONAMENTI
-              </h2>
-            </div>
-          </div>
-          <!-- TARIFFE 3 COLUMNS -->
-          <div class="div_internal_row">
-            <div class="div_internal_column column_width_1e4">
-              <div class="tariffa boxshadow">
-                <h3 class="heading">
-                ORARIA
-                </h3>
-                <p class="price text_bold margin0">
-                  €0.25/ora
-                </p>
-                <p class="comment">
-                  Per ore extra giornaliere o non abbonati
-                </p>
-              </div>
-            </div>
-            <div class="div_internal_column  column_width_1e4 ">
-             <div class="tariffa boxshadow">
-                <h3 class="heading">
-                MENSILE
-                </h3>
-                <p class="price text_bold margin0">
-                  €4.99/mese
-                </p>
-                <p class="comment">
-                  90 minuti di utilizzo al giorno
-                </p>
-              </div>
-            </div>
-            <div class="div_internal_column column_width_1e4">
-              <div class="tariffa boxshadow">
-                <h3 class="heading">
-                ANNUALE
-                </h3>
-                <p class="price text_bold margin0">
-                  €24.99/anno
-                </p>
-                <p class="comment">
-                  120 minuti di utilizzo al giorno
-                </p>
-              </div>
-            </div>
-          </div>
-          <!-- LE NOSTRE STAZIONI -->
-          <div class="spacer4em"></div>
-          <div class="div_internal_row">
-            <div class="div_internal_column text_center"> 
-              <h2>
-                LE NOSTRE STAZIONI
-              </h2>
-            </div>
-          </div>
-          <div class="spacer1em"></div>
-          <!-- MAPPA -->
-          <div class="div_internal_row">
-            <div id="map"></div>
-          </div>
+        </div>
       </div>
       <footer class="div_page_footer">
       Site made by Davide Cuni
       </footer>
     </div>
-
   </body>
 </html>

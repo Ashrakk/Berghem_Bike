@@ -10,6 +10,7 @@ export class ResponsiveManager {
   private menuRightDefault:     HTMLElement | undefined | null;
   private menuRightLogged:      HTMLElement | undefined | null;
   private menuStatus:           boolean; // TRUE = OPEN
+  private currentMenuType:      boolean; // True = Logged in / False = default view 
 
   /*PAGE STUFF*/
   private pageContainer:        HTMLElement | undefined | null;
@@ -55,8 +56,14 @@ export class ResponsiveManager {
     return this.mobileStatus;
   }
 
+  public getCurrentMenuType(): boolean
+  {
+    return this.currentMenuType;
+  }
+
   constructor(width: number, menu_right_type: boolean) {
     this.mobileWidth = width;
+    this.currentMenuType = menu_right_type;
     /*MENU STUFF*/
     this.menuNavbar           = document.getElementById('id-navbar');
     this.menuRightDefault     = document.getElementById('id-menu-right-default');
@@ -344,6 +351,7 @@ export class ResponsiveManager {
     }
     
     this.currentRightMenu?.classList.remove('hidden');
+    this.currentMenuType = menu_type;
     this.handleResponsiveness();
   }
 }

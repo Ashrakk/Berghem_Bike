@@ -72,8 +72,6 @@
         buttLogout.addEventListener('click', () => {
           uimanager.submit_logout();
         });
-
-        let mapsman = new MapsManager();
       }
     </script>
 
@@ -146,7 +144,7 @@
     </div>
     
     <!-- CONTENITORE PRINCIPALE FLEX ROW | | | -->
-    <div class="div_row background hidden fullheight" id="id-page-container">
+    <div class="div_row background hidden" id="id-page-container">
       <!-- CONTENITORE MENU INLINE FLEX -->
       <div class="div_navbar" id="id-navbar">
         <img src = "images/common/logo.png" class = "logo" id="id-logo"> 
@@ -156,19 +154,19 @@
             <a href="contact.php"  type="button">Contatti</a>
         </div>
 
-        <div class="menu_right" id='id-menu-right-1'>
+        <div class="menu_right" id='id-menu-right-default'>
           <butt id='id-butt-login'>Accedi</butt>
           <butt id='id-butt-register'>Registrati</butt>
         </div>
 
-        <div class="menu_right hidden" id='id-menu-right-2'>
-          <a href="user_managment/user/dashboard.php"  type="button">Dashboard</a>
-          <a href="user_managment/account.php"  type="button">Account</a>
-          <a href="user_managment/logout.php"  type="button">Logout</a>
+        <div class="menu_right hidden" id='id-menu-right-logged'>
+          <a href="dashboard.php"  type="button">Dashboard</a>
+          <a href="account.php"  type="button">Account</a>
+          <a id="butt_submit_logout" type="button">Logout</a>
         </div>
 
         <div class="menu_right hidden" id='id-menu-right-dropdown-container'>
-          <img id="id-menu-right-dropdown" src = "images/common/dropdown-menu-icon-16.png">
+          <img id="id-menu-right-dropdown" class="" src = "images/common/dropdown-menu-icon-16.png">
         </div>
       </div>
 
@@ -212,7 +210,3 @@
     </div>
   </body>
 </html>
-
-
-
- 
