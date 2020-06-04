@@ -1,6 +1,6 @@
 # Berghem_Bike
 
-## A basic Bike Sharing project, made from scratch.
+## Bike Sharing themed website, made from scratch.
 
 ### What's the purpose of this project?
 
