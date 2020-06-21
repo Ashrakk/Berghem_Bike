@@ -1,6 +1,6 @@
 # Berghem_Bike
 
-## Bike Sharing themed website, made from scratch.
+## A Bike Sharing Project, made from scratch.
 
 ### What's the purpose of this project?
 
@@ -17,8 +17,10 @@ Updates:
 + Javascript Bundlers (Rollup)
 + Javascript Minifier (Terser)
   
-Also, i might bring this project as thesis for my Diploma.
+I brought this project as thesis for my Diploma.
 
+### If you wish to continue the development, i'll always be available to create a new branch, feel free to contact me!
+### Telegram Contact: @Ashra_k
 
 ### Project is setup for Visual Studio Code
 
