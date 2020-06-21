@@ -5,6 +5,7 @@ class User {
     private $logged;
     private $cur_session_id = null;
 
+    private $userID      = null;
     private $email      = null;
     private $passwd     = null;
     private $username   = null;
@@ -23,6 +24,9 @@ class User {
 
     public function getLoginStatus()
     { if (isset($this->logged)) { return $this->logged; } else return null; }
+    
+    public function getUserID()
+    { if (isset($this->userID)) { return $this->userID; } else return null; }
 
     public function getEmail()
     { if (isset($this->email)) { return $this->email; } else return null; }
@@ -58,6 +62,9 @@ class User {
 
     public function setSessionID($val)
     { $this->cur_session_id = $val; }
+
+    public function setUserID($val)
+    { $this->userID = $val; }
 
     public function setEmail($val)
     { $this->email = $val; }
@@ -96,7 +103,7 @@ class User {
     
     public function __construct()
     {
-        $this->logged = false;
+        $this->setLoginStatus(false);
         $this->cur_session_id = session_id();
     }
 
@@ -127,6 +134,17 @@ class User {
         }
         else
         {
+            //SECURITY CHECK: ARE VALUES ARRAYS?
+
+            if(is_array($tmp_username)      or
+                is_array($tmp_email)        or
+                is_array($tmp_birthdate)    or
+                is_array($tmp_passwd))
+            {
+                return GENERAL_ERROR;
+                exit();
+            }
+
             $result = preg_match(REGEX_USER, $tmp_username);
             if(!$result)
                 return INVALID_USERNAME;
@@ -165,6 +183,8 @@ class User {
             $this->setEmail($tmp_email);
             $this->setBirth($tmp_birthdate);
             $this->setPassword($finalpass);
+            $this->setVerified(0);
+            $this->setPrivilege(0);
 
             $result = DbManager::query_register($this);
             if($result === SUCCESS)
@@ -185,11 +205,11 @@ class User {
         ----ERROR CODES----
         0: Wrong username or password
     */
+    
     public function login($tmp_username_email, $tmp_passwd): int
     {
         //CHECK AND SANITIZE STRINGS
         $result = false;
-        $kind   = false;    //false = email, true = username
 
         if( 
             $tmp_username_email     === '' or $tmp_username_email  == null  
@@ -199,6 +219,14 @@ class User {
         }
         else
         {
+            //SECURITY CHECK: ARE VALUES ARRAYS?
+
+            if(is_array($tmp_username_email) or is_array($tmp_passwd))
+            {
+                return GENERAL_ERROR; //comunicate to client that there was an error
+                exit();
+            }
+
             $result = preg_match(REGEX_EMAIL, $tmp_username_email);
             if(!$result)
             {
@@ -231,7 +259,7 @@ class User {
             //EVERYTHING SEEMS FINE.. CALL THE DB!
             $this->setPassword($tmp_passwd);
 
-            $result = DbManager::query_login($this, $kind);
+            $result = DbManager::query_login($this);
             if($result === SUCCESS)
             {
                 $this->setLoginStatus(true);       
@@ -242,7 +270,7 @@ class User {
     
     public function logout()
     {
-        $this->logged = false;
+        $this->setLoginStatus(false);
     }
 
     public function forgotpass()
@@ -254,4 +282,66 @@ class User {
     {
         
     }
+
+    public function countActivities()
+    {
+        $count = DbManager::countUserActivities($this);
+        return $count;
+    }
+
+    public function getTodayActivities()
+    {
+        $activities = DbManager::getUserTodayActivities($this);
+
+        $xml = new SimpleXMLElement("<user_activities></user_activities>");
+
+        if($activities != null or $activities != false)
+        {
+            foreach($activities as $row)
+            {
+                $xmlActivity = $xml->addChild('activity');
+                
+                $start  = DateTime::createFromFormat('Y/m/d H:i:s', $row['startTime']);
+                $end    = DateTime::createFromFormat('Y/m/d H:i:s', $row['endTime']);
+                $duration = $start->diff($end, true);
+    
+                $xmlActivity->addChild('duration',  $duration->format("PT%HH%iM0S"));
+                $xmlActivity->addChild('distance',  $row['dist']);
+            }
+        }
+
+        return $xml;
+    }
+
+    public function getActivities($complete, $offset, $limit)
+    {
+        if($complete === true)
+            $activities = DbManager::getUserActivities($this, $offset, $limit);
+        else
+            $activities = DbManager::getUserOverviewActivities($this);
+
+        $xml = new SimpleXMLElement("<user_activities></user_activities>");
+
+        if($activities != null or $activities != false)
+        {    
+            foreach($activities as $row)
+            {
+                $xmlActivity = $xml->addChild('activity');
+                $start  = DateTime::createFromFormat('Y/m/d H:i:s', $row['startTime']);
+                $end    = DateTime::createFromFormat('Y/m/d H:i:s', $row['endTime']);
+                $duration = $start->diff($end, true);
+                if($complete === true)
+                {
+                    $xmlActivity->addChild('date',          $start->format("Y/m/d"));
+                    $xmlActivity->addChild('origin',        $row['originName']);
+                    $xmlActivity->addChild('destination',   $row['destName']);
+                }
+                $xmlActivity->addChild('duration',  $duration->format("%H Ore e %i Min"));
+                $xmlActivity->addChild('distance',      $row['dist']);
+            }
+        }
+
+        return $xml;
+    }
+
 }?>

@@ -190,6 +190,11 @@ ul
   text-align: center !important;
 }
 
+.text_right
+{
+  text-align: right !important;
+}
+
 .flexColumn
 {
   display: flex;
@@ -280,6 +285,7 @@ ul
   background-repeat: repeat;
   background-size: auto;
   z-index: -1;
+  min-height: calc(100vh - 3.5em);
 }
 
 .bikelogohomebig
@@ -296,13 +302,18 @@ ul
 
 /*SPECIFIC STUFF*/
 
+
+.big_map
+{
+  min-height: 51em !important;
+}
+
+
 .separator
 {
   border-bottom: 1px solid #aaa;
-  margin: auto;
+  margin: 1em auto;
   padding: 0.2em 1em;
-      padding-bottom: 0.2em;
-  padding-bottom: 0.1em;
 }
 
 .boxshadow
@@ -315,12 +326,11 @@ ul
 #messageBox
 {
   width: 100%;
-  padding: 0.4em;
+  padding: 0.4em 0;
   font-size: 1em;
-  background-color: rgba(104, 255, 0, 0.70);
   position: fixed;
   margin-top: 0;
-  z-index: 4;
+  z-index: 2000;
   transition: all 0.3s ease-in-out;
 }
 
@@ -333,8 +343,7 @@ ul
 {
   width: 100%;
   margin: 0px auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 1em 0;
   background-color: rgb(80,80,80);
   color: rgb(200,200,200);
 }
@@ -391,7 +400,7 @@ ul
   justify-content: center;
   overflow-x: hidden;
   overflow-y: hidden;
-  padding: 20px 0px;
+  padding: 1em 0px;
 }
 
 .div_internal_column
@@ -416,6 +425,15 @@ ul
   box-shadow: rgba(0,0,0,0.5) 0 0px 15px 0px;
 }
 
+/*GENERAL MENU*/
+.menu_center
+{
+  display: flex;
+  flex: auto;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 /*CLASSE SECONDARIA MENU A DESTRA*/
 .menu_right
 {
@@ -438,6 +456,7 @@ ul
 .menu_left butt,
 .menu_right butt
 {
+  font-family: "Raleway", sans-serif !important;
   padding: 10px 15px;
   background-color: #000000a8;
   color: #fff;
@@ -469,27 +488,10 @@ ul
   box-shadow: inset rgb(236, 85, 38) 0em -5em 1em -1em
 }
 
-
-.specialButton
+.vertical_menu
 {
-  border-radius: 10px;
-  font-size: 2em;
-  padding: 10px 15px;
-  background-color: rgba(255, 120, 0, 1);
-  color: rgb(0, 0, 0);
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  letter-spacing: 1px;
-  overflow: hidden;
-  transition: all 0.3s ease-in-out;
-  transition-property: box-shadow;
-}
-
-.specialButton:hover, .specialButton:active
-{
-  /*background-color: rgba(189, 104, 0, 0.9);*/
-  box-shadow: rgba(0, 0, 0, 0.60) 0px 0px 15px 5px;
+  display: flex;
+  flex-direction: column;  
 }
 
 /*MODALS, LIGHTBOX*/
@@ -717,6 +719,263 @@ ul
   box-shadow: rgba(0, 0, 0, 0.60) 0px 0px 8px 0px;
 }
 
+/*DASHBOARD*/
+
+.dash_menu
+{
+  z-index: 2000;
+  text-align: center;
+  margin: auto;
+}
+
+.dash_menu butt
+{
+  font-family: "Raleway", sans-serif !important;
+  padding: 10px 15px;
+  background-color: #000000ab;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 2px;
+  overflow: hidden;
+  box-shadow: inset rgb(236, 85, 38) 0px 0px 0px 0px,rgba(0,0,0,0.5) 0 0px 10px 0px;
+  transition: all 0.4s ease-in-out;
+  width: 8em;
+}
+
+.dash_menu butt:hover,
+.dash_menu butt:active,
+.dash_menu butt:focus
+{
+  box-shadow: inset rgb(236, 85, 38) 15em 0em 1em -1em,rgba(0,0,0,0.5) 0 0px 10px 0px;
+}
+
+@media screen and (max-width: calc(800px + 4.5em)) {
+  #dash_container
+  {
+    min-width: 90% !important;
+  }
+  .dash_label
+  {
+    width: 8em !important;
+  }
+  /*RESPONSIVE TABLE*/
+  .dash_table
+  {
+    width: 100%;
+  }
+
+  .dash_table_header_row
+  {
+    display: none !important;
+  }
+
+  .dash_table_row
+  {
+    display: flex !important; 
+    flex-direction: column;
+    margin-bottom: 2em;
+  }
+
+  .dash_table_cell { 
+		/* Behave  like a "row" */
+    text-align: left !important;
+    min-width: calc(100% - 2em) !important;
+    max-width: max-content !important;
+	}
+	
+	.dash_table_cell:before { 
+    min-width: 60%;
+    display: inline-block;
+    font-weight: bold;
+    font-family: "Raleway", sans-serif;
+	}
+  
+	.dash_table_cell:nth-of-type(1):before { content: "Data "; } 
+	.dash_table_cell:nth-of-type(2):before { content: "Stazione di partenza"; }
+	.dash_table_cell:nth-of-type(3):before { content: "Stazione d'arrivo"; }
+	.dash_table_cell:nth-of-type(4):before { content: "Durata del viaggio"; }
+	.dash_table_cell:nth-of-type(5):before { content: "Distanza stimata"; }
+}
+
+#dash_container
+{
+  padding: 1em;
+  box-shadow: inset rgba(0,0,0,0.5) 0px 0px 10px 0;
+  min-width: 800px;
+  margin: 0 auto;
+}
+
+#dash_container .bigLabel
+{
+  font-size: 1.5em;
+  font-family: "Raleway";
+}
+
+#dash_container .bigButt
+{
+  box-shadow: inset rgb(236, 85, 38) 0em 0em 4px 2px;
+  padding: 0.3em 1em;
+  font-size: 1.5em;
+  font-family: "Raleway";
+  cursor: pointer;
+}
+
+#dash_container .smallButt
+{
+  box-shadow: inset rgb(236, 85, 38) 0em 0em 4px 2px;
+  padding: 4px 15px;
+  font-family: "Raleway";
+  cursor: pointer;
+}
+
+#dash_container .smallButt:hover,
+#dash_container .smallButt:focus,
+#dash_container .smallButt:active,
+#dash_container .bigButt:hover,
+#dash_container .bigButt:focus,
+#dash_container .bigButt:active
+{
+  box-shadow: inset rgb(236, 85, 38) 0em 0em 4px 2px, inset rgb(98, 98, 98) 0em 0em 15px 0px;
+}
+
+#dash_container .not_active
+{
+  box-shadow: inset rgb(70, 70, 70) 0em 0em 4px 2px !important;
+  cursor: default !important;
+}
+
+.dash_header
+{
+  color: #ec5526;
+  text-align: center;
+}
+
+.dash_color
+{
+  color: #ec5526;
+}
+
+.dash_label
+{
+  width: 16em;
+  display: inline-block;
+  font-weight: 600;
+  font-family: "Raleway", sans-serif;
+}
+
+.dash_free_label
+{
+  padding: 1em;
+  font-weight: 1.2em;
+  font-weight: 600;
+  font-family: "Raleway", sans-serif;
+}
+
+.dash_row
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.5em 0;
+}
+
+.dash_column
+{
+
+}
+
+.internal_container
+{
+  text-align: left;
+  justify-content: center;
+}
+
+.dash_table
+{
+  display: table;
+  margin: auto;
+}
+
+.dash_table_header_row
+{
+  display: table-header-group;
+  background-color: #ec5526;
+  font-weight: bold;
+  font-family: "Raleway", sans-serif;
+}
+
+.dash_table_column_header
+{
+  display: table-cell;
+  padding: 0.5em;
+  border-bottom: 1px solid black;
+  word-wrap: break-word;
+  text-align: center;
+  box-shadow: inset rgba(0,0,0,0.3) 0px 0px 7px 0px;
+}
+
+.dash_table_body
+{
+  display: table-row-group;
+}
+
+.dash_table_row
+{
+  display: table-row;
+}
+
+.dash_table_cell
+{
+  display: table-cell;
+  padding: 1em;
+  box-shadow: inset rgba(0,0,0,0.5) 0px 0px 5px 0px;
+  text-align: center;
+  max-width: 16em;
+}
+
+/* TOOLTIP */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 2px dotted #666;
+  font-family: "Raleway", sans-serif;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 15em;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -8em;
+  opacity: 0;
+  transition: opacity 0.3s;
+  padding: 0.5em;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
 
 /*IMAGES*/
 
@@ -739,6 +998,13 @@ ul
 .loader
 {
   margin: calc(50vh - 80px) 0;
+}
+
+.loader_dashboard
+{
+position: absolute;
+margin: -4em -5em;
+left: 50%;
 }
 
 .icon

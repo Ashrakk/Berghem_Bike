@@ -24,18 +24,24 @@ export class Notification
   * Display timed desktop mode notification
   * @param str 
   */
-    public showMessageBox( str: string )
+    public showMessageBox( color: boolean, str: string )
     {
       let tmpTimer;
-
+      let strColor: string;
       this.clearTimers('box');
       this.clearMsgBox();
-  
+
+      if(color == false)
+        strColor = 'messageRed';
+      else
+        strColor = 'messageGreen';
+
       if(str != undefined &&
         this.msgBox != undefined)
       {
+        this.contentContainer?.classList.add("div_center_messageShow");
         this.msgBox.innerHTML = str;
-        this.contentContainer?.classList.add("div_center_messageShow")
+        this.msgBox.classList.add(strColor);
         this.msgBox.classList.add("messageBoxAfter");
         this.msgBox.classList.add("anim_fadeIn");
         this.msgBox.classList.remove("hidden");
@@ -55,6 +61,7 @@ export class Notification
           if(this.msgBox != undefined)
           {
             this.msgBox.classList.add("hidden");
+            this.msgBox.classList.remove(strColor);
             this.msgBox.classList.remove("anim_fadeOut");
             this.msgBox.classList.remove("messageBoxAfter");
             this.contentContainer?.classList.remove("div_center_messageShow")
@@ -75,6 +82,8 @@ export class Notification
       if(this.msgBox != undefined)
       {
         this.msgBox.classList.add("hidden");
+        this.msgBox.classList.remove("messageGreen");
+        this.msgBox.classList.remove("messageRed");
         this.msgBox.classList.remove("anim_fadeOut");
         this.msgBox.classList.remove("messageBoxAfter");
         this.contentContainer?.classList.remove("div_center_messageShow")

@@ -2,7 +2,7 @@
 
 const REGEX_USER   = '/^[a-zA-Z0-9_]+$/';
 const REGEX_EMAIL  = '/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/';
-const REGEX_PASS   = '/^[a-zA-Z0-9!@#$%^&*_~-]+$/';
+const REGEX_PASS   = '/^[a-zA-Z0-9!@#$%^&*_.~-]+$/';
 const REGEX_NAME  = '/^[a-zA-Z]+$/';
 
 const SUCCESS             =  1;
@@ -21,6 +21,9 @@ const ALREADY_LOGGED_IN   = -11;
 const WRONG_EMAIL_OR_PASS = -12;
 const DB_ERROR            = -13;
 const LENGHT_LIMIT        = -14;
+const NOT_LOGGED_IN       = -15;
+const SESSION_EXPIRED     = -16;
+const TOO_MANY_REQUESTS   = -17;
 
 //constraints
 const LENGHT_LIMIT_DEFAULT = 64;

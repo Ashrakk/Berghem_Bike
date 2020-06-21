@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="./css/style.css">
 
     <script src = "./ts/build/src/app.min.js" type="module"></script>  
+    <!--
     <script src = "./ts/build/src/uimanager.js" type="module"></script> 
     <script src = "./ts/build/src/modal.js" type="module"></script> 
-    <!--
     -->
     <script>
       var uimanager;
@@ -45,9 +45,9 @@
 
     <script type="module">
       // IMPORTO LE CLASSI NECESSARIE
-      import { MapsManager } from './ts/build/src/app.min.js';
-      import { UIManager } from './ts/build/src/uimanager.js';
-      import { Modal } from './ts/build/src/modal.js';
+      import { MapsManager, UIManager, Modal } from './ts/build/src/app.min.js';
+      //import { UIManager } from './ts/build/src/uimanager.js';
+      //import { Modal } from './ts/build/src/modal.js';
 
       initialize();
 
@@ -55,28 +55,15 @@
       {
         let modal_login         = new Modal('modal_container_login', 'id-butt-login');
         let modal_register      = new Modal('modal_container_register', 'id-butt-register');
-        let buttLogin   = document.getElementById('butt_submit_login');
-        let buttReg     = document.getElementById('butt_submit_reg');
-        let buttLogout  = document.getElementById('butt_submit_logout');
 
         uimanager = new UIManager(modal_login, modal_register);
-
-        buttLogin.addEventListener('click', () => {
-          uimanager.submit_login();
-        });
-
-        buttReg.addEventListener('click', () => {
-          uimanager.submit_reg();
-        });
-
-        buttLogout.addEventListener('click', () => {
-          uimanager.submit_logout();
-        });
       }
     </script>
 
   </head>
   <body>
+    <!-- PAGE ID -->
+    <input type="hidden" id='page-id' value='dashboard'>
     <!-- MODALE LOGIN, NASCOSTO DEFAULT -->
     <div class="modal_overlay hidden" id="modal_container_login">
       <div class="modal_content">
@@ -151,6 +138,7 @@
 
         <div class="menu_left" id="id-menu-left">
             <a href="index.php"  type="button">Home</a>
+            <a href="map.php"  type="button">Mappa</a>
             <a href="contact.php"  type="button">Contatti</a>
         </div>
 
@@ -160,8 +148,7 @@
         </div>
 
         <div class="menu_right hidden" id='id-menu-right-logged'>
-          <a href="dashboard.php"  type="button">Dashboard</a>
-          <a href="account.php"  type="button">Account</a>
+          <a href="dashboard.php"  type="button">Bacheca</a>
           <a id="butt_submit_logout" type="button">Logout</a>
         </div>
 
@@ -170,19 +157,39 @@
         </div>
       </div>
 
+      <div id="messageBox" class="hidden"></div>
+
       <!--CONTENITORE CENTRALE FLEX COLUMN -->
       <div id="id-main-content-container" class="div_center">
         <div class="div_internal_row">
           <div class="div_internal_column text_center">
-            <div class="spacer30"></div>
-            <h1 >Work in progress</h1>
-            <div class="spacer30"></div>
+            <div class="spacer2em"></div>
+            <h1>Bacheca</h1>
+          </div>
+        </div>
+        <div class="div_internal_row">
+          <div class="div_internal_column">
+            <div class="dash_menu"> 
+              <div class="menu_center">
+                <butt id="id-butt-overview">Riepilogo</butt>
+                <butt id="id-butt-account">Account</butt>
+                <butt id="id-butt-billing">Fatturazione</butt>
+                <butt id="id-butt-activity">Attività</butt>
+                <butt id="id-butt-management" class="hidden">Gestione</butt>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="div_internal_row">
+          <div class="div_internal_column">
+            <div id="dash_container" class="hidden">
+            </div>
           </div>
         </div>
       </div>
-      <footer class="div_page_footer">
+    </div>
+    <footer class="div_page_footer">
       Site made by Davide Cuni
       </footer>
-    </div>
   </body>
 </html>

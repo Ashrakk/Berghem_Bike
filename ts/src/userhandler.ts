@@ -3,19 +3,18 @@ import { ResponsiveManager }    from './responsive.js';
 import { Modal }                from './modal.js';
 import { Notification }         from './notifications.js';
 import { Constants }            from './constants.js';
-
-
+import { DashManager }          from './dashboard.js';
 
 export class UserHandler
 {
-    private constants:          Constants;
-    private ajaxman:            AjaxManager | undefined;
-    private responsive:         ResponsiveManager | undefined;
-    private notify:             Notification | undefined;
-    private modals:             Modal[] = [];
+    private ajaxman:            AjaxManager;
+    private responsive:         ResponsiveManager;
+    private notify:             Notification;
+    private dashboard:          DashManager | undefined;
+
+    private pageID:             HTMLInputElement | undefined | null;
 
     private loginForm:          HTMLElement | undefined | null;
-    private loginModalMsg:      HTMLElement | undefined | null;
     private loginEmailUsername: HTMLInputElement | undefined | null;
     private loginPassword:      HTMLInputElement | undefined | null;
   
@@ -26,16 +25,20 @@ export class UserHandler
     private regPassword:        HTMLInputElement | undefined | null;
     private regPasswordConfirm: HTMLInputElement | undefined | null;  
 
-    constructor(tmpResponsive: ResponsiveManager, tmpNotify: Notification, tmpModals: Modal[])
+    //BUTTONS ALWAYS PRESENT 
+    private buttLogin:        HTMLElement | undefined | null;
+    private buttLogout:       HTMLElement | undefined | null;
+    private buttReg:          HTMLElement | undefined | null;
+
+    constructor(tmpResponsive: ResponsiveManager, tmpNotify: Notification)
     {
-        this.constants  = new Constants();
         this.responsive = tmpResponsive;
         this.notify     = tmpNotify;
-        this.modals     = tmpModals;
         this.ajaxman    = new AjaxManager(); 
 
+        this.pageID = document.getElementById('page-id') as HTMLInputElement;
+
         this.loginForm          = document.getElementById('login_form');
-        this.loginModalMsg      = this.loginForm?.querySelector('div[class=\'modal_error_view\']')  as HTMLElement | null;
         this.loginEmailUsername = this.loginForm?.querySelector('input[name=\'emailusername\']')    as HTMLInputElement | null;
         this.loginPassword      = this.loginForm?.querySelector('input[name=\'password\']')         as HTMLInputElement | null;
     
@@ -45,11 +48,43 @@ export class UserHandler
         this.regBirth         = this.regForm?.querySelector('input[name=\'birthdate\']')          as HTMLInputElement | null;
         this.regPassword      = this.regForm?.querySelector('input[name=\'password\']')           as HTMLInputElement | null;
         this.regPasswordConfirm = this.regForm?.querySelector('input[name=\'passwordConfirm\']')  as HTMLInputElement | null;
+
+        this.buttLogin   = document.getElementById('butt_submit_login');
+        this.buttReg     = document.getElementById('butt_submit_reg');
+        this.buttLogout  = document.getElementById('butt_submit_logout');
+    
+        this.buttLogin?.addEventListener('click', () => {
+          this.submit_login();
+
+        });
+    
+        this.buttReg?.addEventListener('click', () => {
+          this.submit_registration();
+        });
+    
+        
+        this.buttLogout?.addEventListener('click', () => {
+          this.submit_logout();
+        });     
+
+        this.init();
+    }
+
+    private init()
+    {
+      this.check_user();
+
+      if(this.pageID != undefined)
+        if(this.pageID.value == 'dashboard')
+        {
+          this.dashboard = new DashManager(this, this.notify);
+        }
     }
 
     public check_user()
     {
-      this.ajaxman?.ajax_check_user_login_cookie(
+      this.ajaxman?.ajax_custom_request(
+        Constants.REQUEST_LOGIN_STATUS,
         (xmlRequest: XMLHttpRequest) => 
         {
           let result = xmlRequest.responseText;
@@ -67,8 +102,21 @@ export class UserHandler
           }
         });
     }
+
+    public submit_logout()
+    {
+      this.ajaxman?.ajax_submit_logout(
+        (xmlRequest: XMLHttpRequest) => 
+        {
+          this.responsive?.switchMenuType(false);
+          sessionStorage.clear();
   
-    public submit_login()
+          if(this.pageID?.value == 'dashboard')
+            window.location.replace("index.php");
+        });
+    }
+  
+    private submit_login()
     {
         //get data from form    
         let str_emailuser = this.loginEmailUsername?.value;
@@ -116,7 +164,10 @@ export class UserHandler
                   if(this.responsive?.isMobileModeActive() == true)
                     this.notify?.showCurModalMsgField('Login eseguito con successo', true, true);
                   else
-                    this.notify?.showMessageBox('Login eseguito con successo');
+                    this.notify?.showMessageBox(true,'Login eseguito con successo');
+
+                  if(this.pageID?.value == 'dashboard')
+                    window.location.replace("dashboard.php");
                 }
                 else
                 {
@@ -124,6 +175,9 @@ export class UserHandler
                   {
                     case Constants.WRONG_EMAIL_OR_PASS: //Email o password errati
                       this.notify?.showCurModalMsgField('Email o password errati', false, false);
+                      break;
+                    case Constants.TOO_MANY_REQUESTS:   //Aspetta il timeout
+                      this.notify?.showCurModalMsgField('Troppe richieste ricevute, attendi prima di riprovare', false, false);
                       break;
                     default:                            //Something went really wrong.
                       this.notify?.showCurModalMsgField('Qualcosa è andato storto.', false, false);
@@ -134,17 +188,7 @@ export class UserHandler
         }
     }
 
-  public submit_logout()
-  {
-    this.ajaxman?.ajax_submit_logout(
-      (xmlRequest: XMLHttpRequest) => 
-      {
-        this.responsive?.switchMenuType(false);
-        sessionStorage.setItem('logged', 'false');
-      });
-  }
-
-  public submit_registration()
+  private submit_registration()
   {
     //get data from form    
     let str_username    = this.regUsername?.value;
@@ -236,7 +280,7 @@ export class UserHandler
 
       if (str_password.match('[!@#%&_-]') == null)
       {
-        this.notify?.showCurModalMsgField('La password deve contenere almeno un carattere speciale: ( ~ ! @ # $ % ^ & * _ - ).', false, false);
+        this.notify?.showCurModalMsgField('La password deve contenere almeno un carattere speciale: ( ~ ! @ # $ % ^ & * _ . - ).', false, false);
         return;    
       }
 
@@ -265,7 +309,7 @@ export class UserHandler
             if(this.responsive?.isMobileModeActive() == true)
               this.notify?.showCurModalMsgField('Registrazione eseguita con successo, un\'email di verifica è stata inviata alla tua casella di posta', true, true);
             else
-              this.notify?.showMessageBox('Registrazione eseguita con successo, un\'email di verifica è stata inviata alla tua casella di posta');
+              this.notify?.showMessageBox(true,'Registrazione eseguita con successo, un\'email di verifica è stata inviata alla tua casella di posta');
           }
           else
           {
@@ -286,8 +330,11 @@ export class UserHandler
               case Constants.INVALID_PASSWORD:      //The password entered is not valid
                 this.notify?.showCurModalMsgField('La password inserita non è valida', false, false);
                 break; 
-              case Constants.LENGHT_LIMIT:      //The password entered is not valid
+              case Constants.LENGHT_LIMIT:          //The password entered is not valid
                 this.notify?.showCurModalMsgField('Un campo ha superato il limite di 64 caratteri<br>limite email: 254 caratteri<br>limite password: 72 caratteri', false, false);
+                break;
+              case Constants.TOO_MANY_REQUESTS:     //Aspetta il timeout
+                this.notify?.showCurModalMsgField('Troppe richieste ricevute, attendi prima di riprovare', false, false);
                 break; 
               default:                              //Something went really wrong.
                 this.notify?.showCurModalMsgField('Qualcosa è andato storto.', false, false);
@@ -297,5 +344,4 @@ export class UserHandler
         });
     }
   }
-
 }

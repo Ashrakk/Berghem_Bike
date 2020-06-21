@@ -1,5 +1,6 @@
 import * as L from 'leaflet';
 import { AjaxManager }  from './ajaxmanager.js';
+import { Constants } from './constants.js';
 
 class CustomMarker
 {
@@ -41,10 +42,9 @@ export class MapsManager {
   constructor() 
   {
     this.mapDiv = document.getElementById('map');
-    /*boundOne boundTwo zoomLevel should be retrieved by ajax call*/
     let boundOne = new L.LatLng(45.681539, 9.622572);
-    let boundTwo = new L.LatLng(45.710315, 9.729688);
-    this.zoomLevel = 13;
+    let boundTwo = new L.LatLng(45.715315, 9.729688);
+    this.zoomLevel = 14;
     this.mapBounds = new L.LatLngBounds(boundOne, boundTwo);
 
     this.markerGreen  = new CustomMarker('./images/common/map-marker-green.svg');
@@ -52,6 +52,13 @@ export class MapsManager {
     this.markerRed    = new CustomMarker('./images/common/map-marker-red.svg');
 
     this.ajaxman = new AjaxManager();
+
+    //prevent touch swipe to open menu 
+    this.mapDiv?.addEventListener('touchmove', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    });
 
     this.init();
   }
@@ -63,7 +70,7 @@ export class MapsManager {
         this.mapBounds  != undefined &&
         this.zoomLevel  != undefined) 
     {
-      this.map = new L.Map('map')
+      this.map = new L.Map('map', { scrollWheelZoom: false})
       this.map.fitBounds(this.mapBounds);
       this.map.setMaxBounds(this.mapBounds);
       this.map.setZoom(this.zoomLevel);
@@ -73,7 +80,7 @@ export class MapsManager {
           attribution:
             'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
           maxZoom: 16,
-          minZoom: 13,
+          minZoom: 14,
           id: 'mapbox/streets-v11',
           tileSize: 512,
           zoomOffset: -1,
@@ -82,13 +89,14 @@ export class MapsManager {
         }
       ).addTo(this.map);
     }
-
     this.reload();
   }
 
   public reload()
   {
-    this.ajaxman.ajax_getMapMarkers((xmlRequest: XMLHttpRequest) => 
+    this.ajaxman.ajax_custom_request(
+    Constants.REQUEST_MAP_MARKERS,
+    (xmlRequest: XMLHttpRequest) => 
     {
       let xml = xmlRequest.responseXML;
       let stations = xml?.documentElement.getElementsByTagName('Station');
@@ -118,7 +126,7 @@ export class MapsManager {
 
           popup   = new L.Popup().setContent(`Stazione: ${name}<br>${addr}<br>Slot: ${available}/${slots}`);
           
-          if(available < (slots * (1/3) ))
+          if(available < (slots * (1/4) ))
           {
             //RED MARKER
             icon = this.markerRed.getIcon();

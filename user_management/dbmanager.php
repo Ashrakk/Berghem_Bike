@@ -41,23 +41,31 @@ class DbManager
         return $d && $d->format($format) === $date;
     }
 
-    public static function query_map()
+    public static function query_count_stations()
+    {
+        $statement  = self::$pdo->query("
+        SELECT COUNT(*) AS count
+        FROM stations");
+
+        return $statement->fetchAll(PDO::FETCH_NUM)[0][0];
+    }
+
+    public static function query_stations($offset = 0, $limit = PHP_INT_MAX)
     {
         $index = 1;
 
-        $statement  = self::$pdo->query("SELECT * FROM stations");
-        $stations = $statement->fetchAll(PDO::FETCH_ASSOC);
-        $statement  = self::$pdo->query("SELECT location FROM bikes WHERE bikes.`status` = 'available'");
-        $bikes = $statement->fetchAll(PDO::FETCH_NUM);
+        $statement  = self::$pdo->query("
+        SELECT stations.IDStation, stations.lat, stations.lon, stations.stationName, stations.stationAddr, stations.slots, COUNT(*) AS available
+        FROM stations
+        INNER JOIN bikes
+        ON bikes.location = stations.IDStation
+        GROUP BY stations.IDStation
+        LIMIT $offset, $limit");
 
-        $stations_count = count($stations);
-        $bike_array     = array_fill(1, $stations_count, 0);
-        $xml            = new SimpleXMLElement("<map_data></map_data>");
-
-        foreach($bikes as $row)
-        {
-            $bike_array[$row[0]]++;
-        }
+        $stations = $statement->fetchAll(PDO::FETCH_BOTH);
+        $xml      = new SimpleXMLElement("<map_data></map_data>");
+        
+        $xml->addChild('count', count($xml));
 
         foreach($stations as $row)
         {
@@ -65,10 +73,10 @@ class DbManager
             $xmlStation->addChild('idst',       $row['IDStation']);
             $xmlStation->addChild('lat',        $row['lat']);
             $xmlStation->addChild('lon',        $row['lon']);
-            $xmlStation->addChild('slots',      $row['slots']);
-            $xmlStation->addChild('available',  $bike_array[$index]);
             $xmlStation->addChild('name',       $row['stationName']);
             $xmlStation->addChild('addr',       $row['stationAddr']);
+            $xmlStation->addChild('slots',      $row['slots']);
+            $xmlStation->addChild('available',  $row['available']);
             $index++;
         }
 
@@ -80,20 +88,22 @@ class DbManager
 
     }
 
-    public static function query_login($user, $kind)
+    public static function query_login($user)
     {
         $statement  = null;
         $result     = null;
-        if($kind)   //if username
+        if($user->getUsername() != null)   //if username
         {
-            $statement = self::$pdo->prepare("SELECT username, password FROM users WHERE username = ?");
+            $statement = self::$pdo->prepare("SELECT * FROM users WHERE username = ?");
             $result = $statement->execute([$user->getUsername()]);
         }
-        else        //if email
+        else if ($user->getEmail() != null) // if email
         {
-            $statement = self::$pdo->prepare("SELECT email, password FROM users WHERE email = ?");
+            $statement = self::$pdo->prepare("SELECT * FROM users WHERE email = ?");
             $result = $statement->execute([$user->getEmail()]);
         }
+        else
+            return GENERAL_ERROR;
 
         if(!$result)
             return DB_ERROR;
@@ -108,7 +118,16 @@ class DbManager
 
                 if (password_verify($pass, $result['password']))
                 {
-                    $user->setPassword($pass);
+                    $user->setPassword('');
+                    $user->setUserID($result['IDUser']);
+                    $user->setEmail($result['email']);
+                    $user->setUsername($result['username']);
+                    $user->setName($result['name']);
+                    $user->setSurname($result['surname']);
+                    $user->setAddress($result['address']);
+                    $user->setBirth($result['birthdate']);
+                    $user->setVerified($result['verified']);
+                    $user->setPrivilege($result['privilege']);
                     return SUCCESS;
                 } 
                 else 
@@ -138,9 +157,72 @@ class DbManager
                 $result = $statement->execute([$user->getUsername(), $user->getEmail(), $user->getBirth(), $user->getPassword()]);
                 if (!$result)
                     return DB_ERROR;
+
+                $statement = self::$pdo->prepare("SELECT * FROM users WHERE username = ?");
+                $result = $statement->execute([$user->getUsername()]);
+
+                $user->setPassword('');
+                $user->setUserID($result['IDUser']);
             }
         }
         return SUCCESS;
+    }
+
+    public static function countUserActivities($user)
+    {
+        $id     = $user->getUserID();
+        $statement  = self::$pdo->query("
+        SELECT COUNT(*) AS count
+        FROM rentals
+        WHERE IDUser = $id
+        ");
+        return $statement->fetchAll(PDO::FETCH_NUM)[0][0];
+    }
+
+    public static function getUserOverviewActivities($user)
+    {
+        $id = $user->getUserID();
+        $statement  = self::$pdo->query("
+        SELECT startTime, endTime, dist
+        FROM rentals
+        WHERE IDUser = $id
+        ");
+        return $statement->fetchAll(PDO::FETCH_BOTH);
+    }
+
+    public static function getUserActivities($user, $offset, $limit)
+    {
+        $id = $user->getUserID();
+        $statement  = self::$pdo->query("
+        SELECT startTime, endTime, stationOrigin.stationName AS originName, stationDest.stationName AS destName, dist        FROM (SELECT *
+                 FROM rentals
+                 WHERE IDUser = $id
+                 ORDER BY convert(startTime, datetime) DESC
+                 LIMIT $offset, $limit
+                 ) AS tab
+                 INNER JOIN stations stationOrigin
+                 ON tab.origin = stationOrigin.IDStation  
+                  INNER JOIN stations stationDest
+                 ON tab.destination = stationDest.IDStation  
+        ORDER BY convert(startTime, datetime) DESC
+        ");
+
+        return $statement->fetchAll(PDO::FETCH_BOTH);
+    }
+
+    public static function getUserTodayActivities($user)
+    {
+        $id = $user->getUserID();
+        $statement  = self::$pdo->query("
+        SELECT *
+        FROM (SELECT *
+             FROM rentals
+             WHERE IDUser = $id
+             ) tab
+             WHERE startTime >= CURDATE() AND
+             startTime < DATE_ADD(CURDATE(), INTERVAL 1 DAY);");
+
+        return $statement->fetchAll(PDO::FETCH_BOTH);
     }
 }
 

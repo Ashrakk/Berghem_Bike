@@ -3,15 +3,15 @@ import {TouchSwipe}         from './touchswipe.js';
 import {UserHandler}        from './userhandler.js';
 import {Notification}       from './notifications.js';
 import {Modal}              from './modal.js';
-//import {MapsManager}        from './mapsmanager.js';
 
 export class UIManager {
   private responsive:       ResponsiveManager;
   private userhandler:      UserHandler;
   private notify:           Notification;
   private swipe:            TouchSwipe | undefined;
-  private pageContainer:    HTMLElement | undefined | null;
   private modals:           Modal[] = [];
+
+  private pageContainer:    HTMLElement | undefined | null;
 
   constructor(...allmodals: Modal[]) 
   {
@@ -21,16 +21,12 @@ export class UIManager {
     else
       this.responsive = new ResponsiveManager(800, false);
     this.notify = new Notification(allmodals, this.responsive.getContentContainer());
-    this.userhandler = new UserHandler(this.responsive, this.notify, this.modals);
-    this.userhandler.check_user()
+    this.userhandler = new UserHandler(this.responsive, this.notify);
 
     this.pageContainer = this.responsive.getPageContainer();
     this.modals = this.notify.getModals();
 
     this.init();
-
-    //INIT MAP
-    //let mapsman = new MapsManager();
   }
 
   /**
@@ -81,20 +77,5 @@ export class UIManager {
         }
       });
     }
-  }
-
-  public submit_login()
-  {
-    this.userhandler.submit_login();
-  }
-
-  public submit_logout()
-  {
-    this.userhandler.submit_logout();
-  }
-
-  public submit_reg()
-  {
-    this.userhandler.submit_registration();
   }
 }
