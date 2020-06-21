@@ -27,11 +27,13 @@ I brought this project as thesis for my Diploma.
 ### Admin Credentials
 
 Username: admin
+
 Password: KXLNKzMxDq3n@
 
 ### Every fake user credentials
 
 Username (example): Stan_Lee
+
 Password: Matrix1234567@
 
 ### ______________________________________________________
