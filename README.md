@@ -22,7 +22,18 @@ I brought this project as thesis for my Diploma.
 ### If you wish to continue the development, i'll always be available to create a new branch, feel free to contact me!
 ### Telegram Contact: @Ashra_k
 
-### -----------------------------------
+### ______________________________________________________
+
+### Admin Credentials
+
+Username: admin
+Password: KXLNKzMxDq3n@
+
+### Every fake user credentials
+
+Username (example): Stan_Lee
+Password: Matrix1234567@
+
 
 ### Project is setup for Visual Studio Code
 
