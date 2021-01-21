@@ -1,10 +1,10 @@
 # Berghem_Bike
 
-## A Bike Sharing Project, made from scratch.
-
-## Link to the live website
+# Link to the live website
 
 https://www.davidevertigocuni.eu/
+
+## A Prototype of a Bike Sharing Website, made from scratch.
 
 ### What's the purpose of this project?
 
