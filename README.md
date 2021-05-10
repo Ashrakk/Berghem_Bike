@@ -1,8 +1,8 @@
 # Berghem_Bike
 
-# Link to the live website
+# Link to the live website (Not anymore)
 
-https://www.davidevertigocuni.eu/
+~~https://www.davidevertigocuni.eu/~~
 
 ## A Prototype of a Bike Sharing Website, made from scratch.
 
