@@ -24,7 +24,7 @@
     "@types/node": "^10.0.3",
     "gts": "^2.0.0",
     "rollup": "^2.7.6",
-    "terser": "^4.6.13",
+    "terser": "^4.8.1",
     "typescript": "^3.8.3"
   },
   "dependencies": {
