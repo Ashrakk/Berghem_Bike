@@ -1,9 +1,5 @@
 # Berghem_Bike
 
-# Link to the live website (Not anymore)
-
-~~https://www.davidevertigocuni.eu/~~
-
 ## A Prototype of a Bike Sharing Website, made from scratch.
 
 ### What's the purpose of this project?
@@ -25,7 +21,6 @@ I brought this project as thesis for my Diploma.
 
 ### If you wish to continue the development, i'll always be available to create a new branch, feel free to contact me!
 ### Telegram Contact: @Ashra_k
-### Email: davidevertigocuni@gmail.com
 
 ### ______________________________________________________
 
