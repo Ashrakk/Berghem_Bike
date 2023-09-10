@@ -2,22 +2,28 @@
 
 ## A Prototype of a Bike Sharing Website, made from scratch.
 
+Languages used:
+- PHP
+- Typescript
+- CSS
+- Hand written HTML
+
+No outside libraries or frameworks were used in this project.
+
 ### What's the purpose of this project?
 
-- Working with multiple cooperating languages 
-- Learning TypeScript 
-- Learning ~~Google Maps API~~ Leaflet  
-- Learning Ajax (XMLHttpRequests) and long-pooling method
+The main goal is to create a website prototype with a user and admin dashboard to manage bike sharing in Bergamo.
+I started this project for the following reasons:
+
+- Learning to work with multiple cooperating languages (Full-stack Development)
+- Improving CSS skills by making a simple framework in JS and CSS for mobile responsiveness.
 - Learning fundamental PHP by making a user managment system and a simple user/admin dashboard
-- Practicing embedded SQL with PHP
-- Improving CSS skills and mobile responsiveness.
-
-Updates:
-
-+ Javascript Bundlers (Rollup)
-+ Javascript Minifier (Terser)
+- Learning TypeScript
+- Practicing embedded SQL with PHP (using PDO)
+- Learning ~~Google Maps API (It now costs money)~~ Leaflet API
+- Learning Ajax (XMLHttpRequests) and long-pooling method
   
-I brought this project as thesis for my Diploma.
+I also brought this project as thesis for my Diploma in IT.
 
 ### If you wish to continue the development, i'll always be available to create a new branch, feel free to contact me!
 ### Telegram Contact: @Ashra_k
