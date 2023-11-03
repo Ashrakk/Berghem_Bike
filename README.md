@@ -5,8 +5,9 @@
 Languages used:
 - PHP
 - Typescript
+- Python
 - CSS
-- Hand written HTML
+- HTML
 
 No outside libraries or frameworks were used in this project.
 
