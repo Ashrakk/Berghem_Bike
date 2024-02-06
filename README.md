@@ -2,10 +2,12 @@
 
 ## A Prototype of a Bike Sharing Website, made from scratch.
 
+[Live Demo Website](https://berghem-bike.typotek.space/)
+
 Languages used:
-- PHP
-- Typescript
-- Python
+- PHP (User management system, Admin and User Dashboard)
+- Typescript (Simple responsive system based on user agent and client width)
+- Python (To create demo data)
 - CSS
 - HTML
 
@@ -55,54 +57,7 @@ Password: Matrix1234567@
 ### Install dependecies:
 
 ```shell
-$ npm i typescript rollup terser -g
-```
-
-Go to ```ts/``` directory
-```shell
-$ cd ts
-```
-
-Initiliaze Typescript
-but do **NOT** overwrite
-*tsconfig.json*
-```shell
-$ tsc --init
-```
-### install types, needed for the compiler
-
-```shell
-$ npm install --save @types/leaflet
-```
-
-```shell
-$ npm install --save @types/geojson
-```
-
-### install rollup plugins needed to make the bundle
-
-Leaflet is built around CommonJS 
-
-```shell
-$ npm install @rollup/plugin-commonjs --save-dev
-```
-
-node-resolve is used to automatically find dependencies in node_modules
-
-```shell
-$ npm install @rollup/plugin-node-resolve --save-dev
-```
-
-this plugin is needed to load the package.json of Leaflet
-
-```shell
-$ npm install @rollup/plugin-json --save-dev
-```
-
-### Install Leaflet 
-
-```shell
-$ npm install leaflet
+$ npm install
 ```
 
 ### Change "main": "dist/leaflet-src.js" to "src/Leaflet.js"
@@ -117,32 +72,6 @@ then change main (at line 108) into
 ```
 
 This is needed because otherwise the bundler won't be able to find the exports of leaflet 
-
-### Install TSLint 
-#### (optional)
-
-```shell
-$ npm i tslint --g
-```
-
-Initialize TSLint
-```shell
-$ tslint --init
-```
-
-remember to not overwrite any file if so is asked.
-
-### Install gts:
-#### (optional)
-
-```shell
-$ npx gts init
-```
-
-Install dependencies
-```shell
-$ npm install
-```
 
 remember to not overwrite any file if so is asked.
 
