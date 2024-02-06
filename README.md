@@ -13,7 +13,7 @@ No outside libraries or frameworks were used in this project.
 
 ### What's the purpose of this project?
 
-The main goal is to create a website prototype with a user and admin dashboard to manage bike sharing in Bergamo.
+My main goal was to create a website prototype with a user and admin dashboard to manage bike sharing in Bergamo.
 I started this project for the following reasons:
 
 - Learning to work with multiple cooperating languages (Full-stack Development)
