@@ -4,6 +4,13 @@
 
 [Live Demo Website](https://berghem-bike.typotek.space/)
 
+### Credentials
+
+- Username: Stan_Lee
+- Password: Matrix1234567@
+
+### ______________________________________________________
+
 Languages used:
 - PHP (User management system, Admin and User Dashboard)
 - Typescript (Simple responsive system based on user agent and client width)
@@ -26,24 +33,10 @@ I started this project for the following reasons:
 - Learning ~~Google Maps API (It now costs money)~~ Leaflet API
 - Learning Ajax (XMLHttpRequests) and long-pooling method
   
-I also brought this project as thesis for my Diploma in IT.
+I brought this project as thesis for my Diploma in IT.
 
-### If you wish to continue the development, i'll always be available to create a new branch, feel free to contact me!
+### Feel free to contact me for any questions!
 ### Telegram Contact: @Ashra_k
-
-### ______________________________________________________
-
-### Admin Credentials
-
-Username: admin
-
-Password: KXLNKzMxDq3n@
-
-### Every fake user credentials
-
-Username (example): Stan_Lee
-
-Password: Matrix1234567@
 
 ### ______________________________________________________
 
